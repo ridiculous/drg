@@ -1,4 +1,4 @@
 module DRG
-  class Let < ::Struct.new(:name, :value)
+  class Let < Struct.new(:name, :value)
   end
 end

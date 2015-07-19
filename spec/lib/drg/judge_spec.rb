@@ -8,7 +8,9 @@ describe DRG::Judge do
 
   describe '.missing_methods' do
     it 'returns the methods that do not exist in the spec' do
-      expect(subject.missing_methods).to eq %w[Report.replace Report#initialize Report#report Report::VerificationCode.find]
+      expect(subject.missing_methods).to eq %w[
+        Report.replace Report#initialize Report#report Report#verification_code Report::VerificationCode.find
+      ]
     end
 
     it 'excludes private methods' do
