@@ -8,10 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Drg::VERSION
   spec.authors       = ["Ryan Buckley"]
   spec.email         = ["arebuckley@gmail.com"]
-
-  spec.summary       = %q{Dynamic RSpec generator}
-  spec.description   = %q{Dynamically update RSpec tests with code style preference and more coverage}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{DRG automation}
+  spec.description   = %q{DRG automates common tasks}
+  spec.homepage      = "https://github.com/ridiculous/drg"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -26,7 +25,10 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.10"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_dependency 'ruby_parser'
+  spec.add_dependency 'ruby2ruby'
+  spec.add_dependency 'bundler', '~> 1.7'
+
+  spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '>= 3.2', '< 4'
 end

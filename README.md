@@ -1,8 +1,6 @@
-# Drg
+# DRG
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/drg`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A Ruby utility to help automate common tasks! Currently includes stuff like enhanced dependency management using Bundler and RSpec scaffolding.
 
 ## Installation
 
@@ -22,7 +20,15 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Pinning Gems
+
+DRG can help you manage your project's gems by updating your Gemfile with pinned versions. Just run:
+
+```bash
+rake drg:pin
+```
+
+Will also try to update all your gems to the most recent version (coming soon).
 
 ## Development
 
@@ -32,5 +38,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/drg.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/ridiculous/drg.

@@ -1,6 +1,6 @@
-require_relative 'let'
-
 module DRG
+  autoload :Let, 'drg/let'
+
   class Scanner
     attr_reader :file
 
