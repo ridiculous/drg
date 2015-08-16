@@ -5,4 +5,9 @@ namespace :drg do
   task :pin do
     DRG::Tasks::Pinner.new.perform
   end
+
+  desc 'Updates your gems in the Gemfile to the latest compatible version'
+  task :update do
+    DRG::Tasks::Updater.new.perform
+  end
 end

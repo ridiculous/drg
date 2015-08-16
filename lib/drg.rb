@@ -9,6 +9,7 @@ module DRG
   autoload :FileContext, 'drg/file_context'
 
   module Tasks
+    autoload :Updater, 'drg/tasks/updater'
     autoload :Pinner, 'drg/tasks/pinner'
     autoload :GemfileLine, 'drg/tasks/gemfile_line'
   end
