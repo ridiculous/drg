@@ -8,6 +8,7 @@ namespace :drg do
 
   desc 'Updates your gems in the Gemfile to the latest compatible version'
   task :update do
+    # sh 'cd /Users/ryanbuckley/apps/dontspreadit && which ruby'
     DRG::Tasks::Updater.new.perform
   end
 end

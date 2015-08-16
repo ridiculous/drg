@@ -1,5 +1,6 @@
 require 'ostruct'
 require 'set'
+require 'bundler'
 require 'drg/version'
 
 module DRG
@@ -11,6 +12,7 @@ module DRG
   module Tasks
     autoload :Updater, 'drg/tasks/updater'
     autoload :Pinner, 'drg/tasks/pinner'
+    autoload :Gemfile, 'drg/tasks/gemfile'
     autoload :GemfileLine, 'drg/tasks/gemfile_line'
   end
 end

@@ -2,6 +2,7 @@ module DRG
   module Tasks
     class GemfileLine < Struct.new(:line, :index)
       alias to_s line
+      alias to_int index
 
       def ==(other)
         line.to_s == other.to_s
