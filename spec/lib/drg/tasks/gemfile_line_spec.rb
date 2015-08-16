@@ -2,9 +2,8 @@ require 'spec_helper'
 
 describe DRG::Tasks::GemfileLine do
   let(:line) { %Q(  gem "pry", '~> 0.10'\n) }
-  let(:index) { 11 }
 
-  subject { described_class.new(line, index) }
+  subject { described_class.new(line) }
 
   describe '#update' do
     it 'updates the @line with the new version' do
@@ -46,6 +45,28 @@ describe DRG::Tasks::GemfileLine do
         expect {
           subject.update('4.2.1')
         }.to change(subject, :version).from("'> 0.2.0', '< 1.0.0'").to("'4.2.1'")
+        expect(subject.line).to eq(%Q(  gem 'byebug', '4.2.1'))
+      end
+    end
+
+    context "when the gem has range set for it's version and a new line character" do
+      let(:line) { %Q(  gem 'byebug', '> 0.2.0', '< 1.0.0'\n) }
+
+      it 'replaces the version and keeps the line character' do
+        expect {
+          subject.update('4.2.1')
+        }.to change(subject, :version).from("'> 0.2.0', '< 1.0.0'").to("'4.2.1'")
+        expect(subject.line).to eq(%Q(  gem 'byebug', '4.2.1'\n))
+      end
+    end
+
+    context "when the gem has range set for it's version and :require false" do
+      let(:line) { %Q(  gem 'byebug', '> 0.2.0', '< 1.0.0', require: false) }
+
+      it 'replaces the version and keeps the :require setting' do
+        expect {
+          subject.update('4.2.1')
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1', require: false))
       end
     end
   end

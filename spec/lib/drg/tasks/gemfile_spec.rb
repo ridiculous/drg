@@ -24,7 +24,7 @@ describe DRG::Tasks::Gemfile do
     gem = subject.find_by_name('byebug')
     expect {
       subject.update(gem, '5.0.0')
-    }.to change(gem, :to_s).from(%Q(  gem 'byebug'\n)).to(%Q(  gem 'byebug', '5.0.0'\n))
+    }.to change(gem, :to_s).from(%Q(  gem 'byebug', require: false\n)).to(%Q(  gem 'byebug', '5.0.0', require: false\n))
   end
 
   it 'updates the "slop" gem to the given -version-' do

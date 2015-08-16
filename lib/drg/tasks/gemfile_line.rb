@@ -11,7 +11,11 @@ module DRG
       # @param [Gem::Version] version responds to version.approximate_recommendation (~> 5.0)
       def update(version)
         if line =~ /,.+\n?/
-          line.sub!(/,\s*(.+)\n?/, ", '#{version.to_s}'\n")
+          if line =~ /,\s*['"].+['"]/
+            line[/,\s*['"].+['"]/] = ", '#{version.to_s}'"
+          else
+            line[/,\s*/] = ", '#{version.to_s}', "
+          end
         elsif line.end_with?("\n")
           line.sub!("\n", ", '#{version.to_s}'\n")
         else
