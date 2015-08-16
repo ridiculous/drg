@@ -28,7 +28,14 @@ DRG can help you manage your project's gems by updating your Gemfile with pinned
 rake drg:pin
 ```
 
-Will also try to update all your gems to the most recent version (coming soon).
+### Updating Gems
+
+DRG can also try to update all outdated gems to the most recent version. It'll update the gem and run your tests. If your
+tests pass, then it'll update your gemfile with the current version. Similar to what Gemnasium offers.
+
+```bash
+rake drg:update
+```
 
 ## Development
 
