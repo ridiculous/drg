@@ -41,6 +41,7 @@ describe DRG::Tasks::Pinner do
     it 'returns the minor level of -version-' do
       expect(subject.minor('1.18.3')).to eq '~> 1.18'
       expect(subject.minor('1.9.10.2')).to eq '~> 1.9'
+      expect(subject.minor('0.0.2')).to eq '0.0.2'
     end
   end
 
@@ -48,6 +49,8 @@ describe DRG::Tasks::Pinner do
     it 'returns the major level of -version-' do
       expect(subject.major('3.17.1')).to eq '~> 3'
       expect(subject.major('4.1.1.2')).to eq '~> 4'
+      expect(subject.major('0.16.1.2')).to eq '~> 0.16'
+      expect(subject.major('0.0.1.2')).to eq '0.0.1.2'
     end
   end
 end

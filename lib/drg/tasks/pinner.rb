@@ -24,11 +24,21 @@ module DRG
       end
 
       def minor(version)
-        "~> #{version[/(\d+\.\d+)/, 1]}"
+        v = version[/(\d+\.\d+)/, 1]
+        if v == '0.0'
+          version
+        else
+          "~> #{v}"
+        end
       end
 
       def major(version)
-        "~> #{version[/(\d+)/, 1]}"
+        v = version[/(\d+)/, 1]
+        if v == '0'
+          minor(version)
+        else
+          "~> #{v}"
+        end
       end
 
       private
