@@ -30,21 +30,21 @@ module DRG
             log(%Q(Tests passed after updating "#{name}" to version #{latest_version}))
             gemfile.update(gem, latest_version)
           else
-            log(%Q(Tests failed after updating "#{name}" to version #{latest_version}))
             @failures << name
           end
         else
-          log(%Q[Failed to install "#{name}" (#{latest_version})])
           @failures << name
         end
       end
 
+      # @note not used
       # @param [String] name of the gem
       # @param [String] current_version of the gem
       def new_versions(name, current_version)
         versions(name).select { |version| version > current_version }
       end
 
+      # @note not used
       # @param [String] name of the gem
       # @return [Array] a list of available versions (e.g. ['1.2.0', '1.1.0'])
       def versions(name)

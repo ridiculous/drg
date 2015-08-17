@@ -8,7 +8,7 @@ module DRG
         line.to_s == other.to_s
       end
 
-      # @param [Gem::Version] version responds to version.approximate_recommendation (~> 5.0)
+      # @param [String] version is the new value for the gem (add/replace)
       def update(version)
         if line =~ /,.+\n?/
           if line =~ /,\s*['"].+['"]/
@@ -24,6 +24,7 @@ module DRG
         line
       end
 
+      # @note not used
       def version
         line[/, (.+)\n?/, 1]
       end

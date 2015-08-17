@@ -1,21 +1,34 @@
 module DRG
   module Tasks
     class Pinner
-      attr_reader :gemfile
+      attr_reader :gemfile, :type
 
-      def initialize(gemfile = Gemfile.new)
-        @gemfile = gemfile
+      def initialize(type = :patch)
+        @type = type
+        @gemfile = Gemfile.new
       end
 
       def perform
         log %Q(Pinning Gemfile "#{gemfile}")
         ::Bundler.locked_gems.specs.each do |spec|
-          gem = gemfile.find_by_name(spec.name)
+          gem = gemfile.find_by_name spec.name
           next unless gem
-          gemfile.update(gem, spec.version)
+          gemfile.update gem, public_send(type, spec.version.to_s)
         end
         gemfile.write
         log %Q(Done)
+      end
+
+      def patch(version)
+        version
+      end
+
+      def minor(version)
+        "~> #{version[/(\d+\.\d+)/, 1]}"
+      end
+
+      def major(version)
+        "~> #{version[/(\d+)/, 1]}"
       end
 
       private

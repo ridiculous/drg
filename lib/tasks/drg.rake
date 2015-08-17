@@ -6,6 +6,16 @@ namespace :drg do
     DRG::Tasks::Pinner.new.perform
   end
 
+  namespace :pin do
+    task :minor do
+      DRG::Tasks::Pinner.new(:minor).perform
+    end
+
+    task :major do
+      DRG::Tasks::Pinner.new(:major).perform
+    end
+  end
+
   desc 'Updates your gems in the Gemfile to the latest compatible version'
   task :update do
     # sh 'cd /Users/ryanbuckley/apps/dontspreadit && which ruby'

@@ -1,37 +1,39 @@
 require 'spec_helper'
 
 describe DRG::Tasks::Gemfile do
-  it 'updates the gem index in @lines to the given -version-' do
-    gem = subject.find_by_name('pry')
-    expect { subject.update(gem, '0.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '0.10.1'\n))
-  end
+  describe '#update' do
+    it 'updates the gem index in @lines to the given -version-' do
+      gem = subject.find_by_name('pry')
+      expect { subject.update(gem, '0.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '0.10.1'\n))
+    end
 
-  it 'updates the "pry" gem to the given -version-' do
-    gem = subject.find_by_name('pry')
-    expect {
-      subject.update(gem, '0.10.1')
-    }.to change(gem, :to_s).from(%Q(  gem "pry", '~> 0.10'\n)).to(%Q(  gem "pry", '0.10.1'\n))
-  end
+    it 'updates the "pry" gem to the given -version-' do
+      gem = subject.find_by_name('pry')
+      expect {
+        subject.update(gem, '0.10.1')
+      }.to change(gem, :to_s).from(%Q(  gem "pry", '~> 0.10'\n)).to(%Q(  gem "pry", '0.10.1'\n))
+    end
 
-  it 'updates the "object_tracker" gem to the given -version-' do
-    gem = subject.find_by_name('object_tracker')
-    expect {
-      subject.update(gem, '1.0.5')
-    }.to change(gem, :to_s).from(%Q(  gem 'object_tracker', '>= 1.0.5'\n)).to(%Q(  gem 'object_tracker', '1.0.5'\n))
-  end
+    it 'updates the "object_tracker" gem to the given -version-' do
+      gem = subject.find_by_name('object_tracker')
+      expect {
+        subject.update(gem, '1.0.5')
+      }.to change(gem, :to_s).from(%Q(  gem 'object_tracker', '>= 1.0.5'\n)).to(%Q(  gem 'object_tracker', '1.0.5'\n))
+    end
 
-  it 'updates the "byebug" gem to the given -version-' do
-    gem = subject.find_by_name('byebug')
-    expect {
-      subject.update(gem, '5.0.0')
-    }.to change(gem, :to_s).from(%Q(  gem 'byebug', require: false\n)).to(%Q(  gem 'byebug', '5.0.0', require: false\n))
-  end
+    it 'updates the "byebug" gem to the given -version-' do
+      gem = subject.find_by_name('byebug')
+      expect {
+        subject.update(gem, '5.0.0')
+      }.to change(gem, :to_s).from(%Q(  gem 'byebug', require: false\n)).to(%Q(  gem 'byebug', '5.0.0', require: false\n))
+    end
 
-  it 'updates the "slop" gem to the given -version-' do
-    gem = subject.find_by_name('slop')
-    expect {
-      subject.update(gem, '3.6.0')
-    }.to change(gem, :to_s).from(%Q(gem 'slop')).to(%Q(gem 'slop', '3.6.0'\n))
+    it 'updates the "slop" gem to the given -version-' do
+      gem = subject.find_by_name('slop')
+      expect {
+        subject.update(gem, '3.6.0')
+      }.to change(gem, :to_s).from(%Q(gem 'slop')).to(%Q(gem 'slop', '3.6.0'\n))
+    end
   end
 
   describe '#find_by_name' do
