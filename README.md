@@ -10,14 +10,6 @@ Add this line to your application's Gemfile:
 gem 'drg'
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install drg
-
 ## Usage
 
 ### Pinning Gems
@@ -40,7 +32,7 @@ gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'drg'
 ```
 
-to
+it'll get changed to
 
 ```ruby
 gem 'rails', '4.2.3'
@@ -48,10 +40,10 @@ gem 'byebug', '5.0.0', require: false
 gem 'therubyracer', '0.12.2', platforms: :ruby
 
 # gotta include ourselves
-gem 'drg', '0.3.1'
+gem 'drg', '0.4.1'
 ```
 
-Although, you may want to pin gems with their _minor_ version (which allows updating patches). To do this, just run:
+Although, you may want to pin gems with their _minor_ version (which allows updating patches). Run:
 
 ```bash
 rake drg:pin:minor
@@ -72,9 +64,9 @@ gem 'rails', '~> 4.2'
 Pinning ignores gems that are fetched from somewhere other than rubygems. For example, gems listed with `:git`, `:github`, 
 or `:path` will be ignored.
 
-There is also a `rake drg:pin:major` that does what you think.
+There is also a `rake drg:pin:major` which does what you think.
 
-This can be combined with `bundle update` to quickly update all gems to the latest patch level.
+This can be combined with `bundle update` to quickly update all gems to the latest patch or minor level.
 
 ### Updating Gems
 
@@ -87,9 +79,8 @@ rake drg:update
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. 
+You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ## Contributing
 
