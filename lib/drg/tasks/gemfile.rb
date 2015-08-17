@@ -7,9 +7,12 @@ module DRG
         @file = ::Bundler.default_gemfile
       end
 
+      # Saves a copy of @lines before changing it (note that #dup and #clone weren't working)
+      #
       # @param [GemfileLine] gem
       # @param [String] version to update the gem line with
       def update(gem, version)
+        @saved_lines = Marshal.load Marshal.dump(lines)
         lines[gem] = gem.update version
       end
 
@@ -17,13 +20,17 @@ module DRG
         lines.each_with_index.each do |line, index|
           next if line =~ /:?path:?\s*(=>)?\s*/
           next if line =~ /:?git(hub)?:?\s*(=>)?\s*/
-          return GemfileLine.new line, index if line =~ /gem\s*['"]#{name}["']/
+          return GemfileLine.new line, index, name if line =~ /gem\s*['"]#{name}["']/
         end
         nil
       end
 
       def lines
         @lines ||= File.readlines file
+      end
+
+      def saved_lines
+        @saved_lines ||= lines
       end
 
       def write
@@ -34,6 +41,10 @@ module DRG
         end
       end
 
+      def rollback
+        @lines = saved_lines
+        write
+      end
     end
   end
 end

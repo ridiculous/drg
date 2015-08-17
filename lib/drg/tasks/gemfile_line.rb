@@ -1,6 +1,6 @@
 module DRG
   module Tasks
-    class GemfileLine < Struct.new(:line, :index)
+    class GemfileLine < Struct.new(:line, :index, :name)
       alias to_s line
       alias to_int index
 
