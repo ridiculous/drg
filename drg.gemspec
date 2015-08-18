@@ -5,7 +5,7 @@ require 'drg/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "drg"
-  spec.version       = Drg::VERSION
+  spec.version       = DRG::VERSION
   spec.authors       = ["Ryan Buckley"]
   spec.email         = ["arebuckley@gmail.com"]
   spec.summary       = %q{DRG automation}

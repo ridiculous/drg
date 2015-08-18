@@ -16,6 +16,11 @@ module DRG
         write
       end
 
+      def remove_version(gem)
+        lines[gem] = gem.remove_version
+        write
+      end
+
       def find_by_name(name)
         lines.each_with_index.each do |line, index|
           next if line =~ /:?path:?\s*(=>)?\s*/

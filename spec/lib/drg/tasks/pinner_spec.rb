@@ -24,11 +24,6 @@ describe DRG::Tasks::Pinner do
         subject.perform
       end
     end
-
-    it 'writes the contents of @lines back to the Gemfile' do
-      expect(subject.gemfile).to receive(:write)
-      subject.perform
-    end
   end
 
   describe '#patch' do

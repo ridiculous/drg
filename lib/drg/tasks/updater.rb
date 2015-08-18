@@ -32,6 +32,7 @@ module DRG
 
       # @param [GemfileLine] gem
       def try_update(gem, latest_version)
+        gemfile.remove_version gem
         bundler.update(gem.name)
         if $0.to_i.zero?
           log(%Q[Succeeded in installing "#{gem.name}" (#{latest_version})])

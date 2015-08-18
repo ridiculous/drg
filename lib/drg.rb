@@ -2,7 +2,6 @@ require 'ostruct'
 require 'set'
 require 'bundler'
 require 'bundler/cli'
-require 'duck_puncher'
 require 'drg/version'
 
 # defines #clone!

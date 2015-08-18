@@ -9,13 +9,21 @@ module DRG
       end
 
       def perform
-        log %Q(Pinning Gemfile "#{gemfile}")
+        log %Q(Pinning Gemfile "#{gemfile.file}")
         ::Bundler.locked_gems.specs.each do |spec|
           gem = gemfile.find_by_name spec.name
           next unless gem
           gemfile.update gem, public_send(type, spec.version.to_s)
         end
-        gemfile.write
+        log %Q(Done)
+      end
+
+      def unpin
+        log %Q(Unpinning Gemfile "#{gemfile.file}")
+        ::Bundler.locked_gems.specs.each do |spec|
+          gem = gemfile.find_by_name spec.name
+          gemfile.remove_version gem if gem
+        end
         log %Q(Done)
       end
 
