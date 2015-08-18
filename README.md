@@ -24,6 +24,8 @@ rake drg:pin
 rake drg:pin:major
 rake drg:pin:minor
 rake drg:pin:patch
+rake drg:pin:latest_patch
+rake drg:pin:latest_minor
 rake drg:unpin
 ```
 

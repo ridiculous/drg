@@ -26,11 +26,20 @@ namespace :drg do
     task :patch do
       DRG::Tasks::Pinner.new(:patch).perform
     end
+
+    desc 'Pins all gems [or the requested gem] to the latest available patch version'
+    task :latest_minor, [:gem_name] do |_, options|
+      DRG::Tasks::ProgessivePinner.new(:minor).perform(options[:gem_name])
+    end
+
+    desc 'Pins all gems [or the requested gem] to the latest available minor version'
+    task :latest_patch, [:gem_name] do |_, options|
+      DRG::Tasks::ProgessivePinner.new(:patch).perform(options[:gem_name])
+    end
   end
 
   desc 'Updates your gems in the Gemfile to the latest compatible version'
   task :update do
-    # sh 'cd /Users/ryanbuckley/apps/dontspreadit && which ruby'
     DRG::Tasks::Updater.new.perform
   end
 end

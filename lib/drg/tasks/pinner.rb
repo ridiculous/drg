@@ -1,6 +1,8 @@
 module DRG
   module Tasks
     class Pinner
+      include Log
+
       attr_reader :gemfile, :type
 
       # @param [Symbol] type of pin to perform. Available options are [:full, :major, :minor, :patch]
@@ -15,6 +17,7 @@ module DRG
           gem = gemfile.find_by_name spec.name
           next unless gem
           gemfile.update gem, public_send(type, spec.version.to_s)
+          gemfile.write
         end
         log %Q(Done)
       end
@@ -56,12 +59,6 @@ module DRG
 
       def patch(version)
         "~> #{version}"
-      end
-
-      private
-
-      def log(msg = nil)
-        puts %Q(  * #{msg})
       end
     end
   end

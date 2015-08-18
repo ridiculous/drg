@@ -12,8 +12,8 @@ module DRG
       # @param [GemfileLine] gem
       # @param [String] version to update the gem line with
       def update(gem, version)
+        saved_lines << lines.clone!
         lines[gem] = gem.update version
-        write
       end
 
       def remove_version(gem)

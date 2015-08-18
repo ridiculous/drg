@@ -13,12 +13,9 @@ describe DRG::Tasks::Gemfile do
   end
 
   describe '#update' do
-    before { allow(subject).to receive(:write) }
-
-    it 'calls +write+ after updating the @lines' do
-      expect(subject).to receive(:write)
-      expect(gem).to receive(:update).with('0.10.1')
-      subject.update(gem, '0.10.1')
+    it 'assigns the current value of @lines to @saved_lines' do
+      original_lines = subject.lines.clone!
+      expect { subject.update(gem, '0.10.1') }.to change { subject.saved_lines }.from([]).to([original_lines])
     end
 
     it 'updates the gem index in @lines to the given -version-' do

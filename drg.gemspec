@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   # spec.add_dependency 'ruby2ruby', '>= 2.2.0', '< 3.0.0'
   spec.add_dependency 'bundler', '~> 1.10'
   spec.add_dependency 'duck_puncher', '1.0.0'
+  spec.add_dependency 'highline', '~> 1.7'
 
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '>= 3.2', '< 4'
