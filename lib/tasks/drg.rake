@@ -21,6 +21,11 @@ namespace :drg do
     task :major do
       DRG::Tasks::Pinner.new(:major).perform
     end
+
+    desc 'Adds the fuzzy match operator to the patch version of your gems (e.g. rails, "~> 4.2.3")'
+    task :patch do
+      DRG::Tasks::Pinner.new(:patch).perform
+    end
   end
 
   desc 'Updates your gems in the Gemfile to the latest compatible version'

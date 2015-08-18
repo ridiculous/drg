@@ -26,9 +26,15 @@ describe DRG::Tasks::Pinner do
     end
   end
 
-  describe '#patch' do
+  describe '#full' do
     it 'returns the given -version-' do
-      expect(subject.patch('1.12.1.pre')).to eq '1.12.1.pre'
+      expect(subject.full('1.12.1.pre')).to eq '1.12.1.pre'
+    end
+  end
+
+  describe '#patch' do
+    it 'returns the fuzzy matched -version-' do
+      expect(subject.patch('1.12.1')).to eq '~> 1.12.1'
     end
   end
 

@@ -3,7 +3,8 @@ module DRG
     class Pinner
       attr_reader :gemfile, :type
 
-      def initialize(type = :patch)
+      # @param [Symbol] type of pin to perform. Available options are [:full, :major, :minor, :patch]
+      def initialize(type = :full)
         @type = type
         @gemfile = Gemfile.new
       end
@@ -27,8 +28,21 @@ module DRG
         log %Q(Done)
       end
 
-      def patch(version)
+      #
+      # Types
+      #
+
+      def full(version)
         version
+      end
+
+      def major(version)
+        v = version[/(\d+)/, 1]
+        if v == '0'
+          minor(version)
+        else
+          "~> #{v}"
+        end
       end
 
       def minor(version)
@@ -40,13 +54,8 @@ module DRG
         end
       end
 
-      def major(version)
-        v = version[/(\d+)/, 1]
-        if v == '0'
-          minor(version)
-        else
-          "~> #{v}"
-        end
+      def patch(version)
+        "~> #{version}"
       end
 
       private

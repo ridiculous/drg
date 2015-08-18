@@ -21,8 +21,9 @@ gem 'drg'
 ```bash
 rake drg:update
 rake drg:pin
-rake drg:pin:minor
 rake drg:pin:major
+rake drg:pin:minor
+rake drg:pin:patch
 rake drg:unpin
 ```
 
@@ -37,7 +38,7 @@ rake drg:update
 
 Easy!
 
-### pin
+### drg:pin
 
 DRG really wants to help you manage your project's gems. But DRG doesn't want to replace Bundler. Instead, we want to build on
 it. Pinning ignores gems that are fetched from somewhere other than rubygems. For example, gems listed with `:git`, `:github`,
@@ -47,13 +48,13 @@ or `:path` will be ignored. You can "pin" all your versions to the current versi
 rake drg:pin
 ```
 
-Which will change gems list in your Gemfile to their full version. So if you have a gemfile that looks like:
+Will update a Gemfile to their full version:
 
 ```ruby
 gem 'rails'
 gem 'byebug', require: false
 gem 'therubyracer', '~> 0.12', platforms: :ruby
-gem 'drg'
+gem 'drg' # need this
 ```
 
 it'll get changed to
@@ -62,18 +63,18 @@ it'll get changed to
 gem 'rails', '4.2.3'
 gem 'byebug', '5.0.0', require: false
 gem 'therubyracer', '0.12.2', platforms: :ruby
-gem 'drg', '0.4.1'
+gem 'drg', '0.4.1' # need this
 ```
 
-### pin:minor
+### drg:pin:minor
 
-Although, you may want to pin gems with their _minor_ version (which allows updating patches). Run:
+Want to pin gems at their _minor_ version?
 
 ```bash
 rake drg:pin:minor
 ```
 
-Which will update your Gemfile from
+Will update a Gemfile
 
 ```ruby
 gem 'rails', '4.2.3'
@@ -85,9 +86,29 @@ to
 gem 'rails', '~> 4.2'
 ```
 
+### drg:pin:patch
+
+Want to pin gems at their _patch_ version?
+
+```bash
+rake drg:pin:minor
+```
+
+Will update a Gemfile
+
+```ruby
+gem 'rails', '4.2.3'
+```
+
+to 
+
+```ruby
+gem 'rails', '~> 4.2.3'
+```
+
 This can be combined with `bundle update` to quickly update all gems to the latest patch or minor level.
 
-### pin:major
+### drg:pin:major
 
 There is also a
 
