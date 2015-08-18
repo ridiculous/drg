@@ -69,6 +69,26 @@ describe DRG::Tasks::GemfileLine do
         }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1', require: false))
       end
     end
+
+    context 'when the line has an inline comment' do
+      let(:line) { %Q(  gem 'byebug'#, '> 0.2.0', require: false) }
+
+      it 'adds the version before the comment' do
+        expect {
+          subject.update('4.2.1')
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1' #, '> 0.2.0', require: false\n))
+      end
+    end
+
+    context 'when the line has an empty inline comment' do
+      let(:line) { %Q(  gem 'byebug'#\n) }
+
+      it 'adds the version before the comment' do
+        expect {
+          subject.update('4.2.1')
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1' #\n))
+      end
+    end
   end
 
   describe '#version' do

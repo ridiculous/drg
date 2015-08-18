@@ -21,16 +21,18 @@ module DRG
 
       # @return [String] line
       def swap_version(full_version)
+        comment = line =~ /#/ ? " #{line.slice!(/#.*/).strip}" : ''
         if line =~ /,.+\n?/
           if line =~ /,\s*['"].+['"]/
             line[/,\s*['"].+['"]/] = full_version
           else
             line[/,\s*/] = "#{full_version}, "
+            line[/\n/] = "#{comment}\n"
           end
         elsif line.end_with?("\n")
-          line.sub!("\n", "#{full_version}\n")
+          line.sub!("\n", "#{full_version}#{comment}\n")
         else
-          line << "#{full_version}\n"
+          line << full_version  << comment << "\n"
         end
         line
       end

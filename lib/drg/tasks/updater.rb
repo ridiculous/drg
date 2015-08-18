@@ -37,6 +37,7 @@ module DRG
         if $0.to_i.zero?
           log(%Q[Succeeded in installing "#{gem.name}" (#{latest_version})])
           if system('rake')
+            log(%Q[Tests passed! Updating Gemfile with ... "#{gem.name}" (#{latest_version})])
             gemfile.update(gem, latest_version)
           else
             failures << gem.name
