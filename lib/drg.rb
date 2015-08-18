@@ -6,7 +6,7 @@ require 'duck_puncher'
 require 'drg/version'
 
 # defines #clone!
-DuckPuncher.load! :Object
+# DuckPuncher.load! :Object
 
 module DRG
   autoload :FileReader, 'drg/file_reader'

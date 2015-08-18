@@ -12,11 +12,6 @@ describe DRG::Tasks::Gemfile do
       subject.update(gem, '0.10.1')
     end
 
-    it 'assigns the current value of @lines to @saved_lines' do
-      original_lines = subject.lines.clone!
-      expect { subject.update(gem, '0.10.1') }.to change { subject.saved_lines }.from([]).to([original_lines])
-    end
-
     it 'updates the gem index in @lines to the given -version-' do
       expect { subject.update(gem, '0.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '0.10.1'\n))
     end

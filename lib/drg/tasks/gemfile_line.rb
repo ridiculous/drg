@@ -9,17 +9,28 @@ module DRG
       end
 
       # @param [String] version is the new value for the gem (add/replace)
+      # @return [String] line
       def update(version)
+        swap_version(", '#{version.to_s}'")
+      end
+
+      # @return [String] line
+      def remove_version
+        swap_version('')
+      end
+
+      # @return [String] line
+      def swap_version(full_version)
         if line =~ /,.+\n?/
           if line =~ /,\s*['"].+['"]/
-            line[/,\s*['"].+['"]/] = ", '#{version.to_s}'"
+            line[/,\s*['"].+['"]/] = full_version
           else
-            line[/,\s*/] = ", '#{version.to_s}', "
+            line[/,\s*/] = "#{full_version}, "
           end
         elsif line.end_with?("\n")
-          line.sub!("\n", ", '#{version.to_s}'\n")
+          line.sub!("\n", "#{full_version}\n")
         else
-          line << ", '#{version.to_s}'\n"
+          line << "#{full_version}\n"
         end
         line
       end
