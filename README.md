@@ -31,8 +31,8 @@ rake drg:unpin
 
 ### drg:update
 
-DRG can update your outdated gems! It does this by checking for outdated gems, and then updating them one at time to the latest
-version. It then run your tests (with `rake`) and if your tests pass, the new version will be written to your Gemfile!
+DRG loves updating gems! Run this command to check for outdated gems and try to update them to the latest available version.
+Each outdated gem will be updated, then DRG will run your tests (with `rake`) and if your tests pass, the new version will be written to your Gemfile!
 
 ```bash
 rake drg:update
@@ -112,10 +112,28 @@ This can be combined with `bundle update` to quickly update all gems to the late
 
 ### drg:pin:major
 
-There is also a
+Pins your gems at the major level:
 
  ```bash
  rake drg:pin:major
+ ```
+
+### drg:pin:latest_patch
+
+Updates the patch version for each outdated gem to the highest available version. This command should be run after `drg:pin` to ensure your gem versions are normalized.
+
+ ```bash
+ rake drg:pin:latest_patch         #=> updates all gems in the Gemfile
+ rake drg:pin:latest_patch[<gem>]  #=> updates only the specified <gem>
+ ```
+
+### drg:pin:latest_minor
+
+Same as `latest_patch` except it updates the minor version to the latest
+
+ ```bash
+ rake drg:pin:latest_minor         #=> updates all gems in the Gemfile
+ rake drg:pin:latest_minor[<gem>]  #=> updates only the specified <gem>
  ```
 
 ### drg:unpin
