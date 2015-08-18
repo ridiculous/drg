@@ -39,10 +39,9 @@ module DRG
           log %Q[Searching for latest #{type} version of "#{spec.name}" (currently #{spec.version.to_s}) ...]
           latest_version = public_send("latest_#{type}_version", spec.name, spec.version)
           if latest_version
-            if ask("  * Do you want to update to version #{latest_version} (y/n)?").to_s.downcase == 'y'
-              gemfile.update gem, latest_version
-              updated_gems << gem.name
-            end
+            log "Updating to version #{latest_version}"
+            gemfile.update gem, latest_version
+            updated_gems << gem.name
           else
             log %Q(No newer #{type} versions found)
           end
