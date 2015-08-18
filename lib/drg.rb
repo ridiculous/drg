@@ -9,10 +9,10 @@ require 'duck_puncher'
 DuckPuncher.load! :Object
 
 module DRG
-  autoload :FileReader, 'drg/file_reader'
-  autoload :Scanner, 'drg/scanner'
-  autoload :Judge, 'drg/judge'
-  autoload :FileContext, 'drg/file_context'
+  # autoload :FileReader, 'drg/file_reader'
+  # autoload :Scanner, 'drg/scanner'
+  # autoload :Judge, 'drg/judge'
+  # autoload :FileContext, 'drg/file_context'
 
   module Tasks
     autoload :Updater, 'drg/tasks/updater'

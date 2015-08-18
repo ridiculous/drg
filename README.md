@@ -1,6 +1,12 @@
 # DRG
 
-A Ruby utility to help automate common tasks! Currently includes stuff like enhanced dependency management using Bundler and RSpec scaffolding.
+A Ruby utility to help automate common tasks! Currently includes enhanced dependency management using Bundler. You
+can pin Gem versions to the current or the next available level (major, minor, or patch). Can also automatically
+update your gems to the latest available version.
+
+## Requirements
+
+* Bundler 1.10+
 
 ## Installation
 
@@ -22,16 +28,18 @@ rake drg:unpin
 
 ### drg:update
 
-DRG can update your outdated gems, one-by-one, to the latest version. It'll update the gem and then run your tests.
-If your tests pass, then the new version will be written to your Gemfile (similar to Gemnasium).
+DRG can update your outdated gems! It does this by checking for outdated gems, and then updating them one at time to the latest
+version. It then run your tests (with `rake`) and if your tests pass, the new version will be written to your Gemfile!
 
 ```bash
 rake drg:update
 ```
 
+Easy!
+
 ### pin
 
-DRG really wants to help you manage your project's gems. But DRG doesn't want to replace Bundler. Instead we want to build on
+DRG really wants to help you manage your project's gems. But DRG doesn't want to replace Bundler. Instead, we want to build on
 it. Pinning ignores gems that are fetched from somewhere other than rubygems. For example, gems listed with `:git`, `:github`,
 or `:path` will be ignored. You can "pin" all your versions to the current version listed in the Gemfile.lock:
 
