@@ -28,12 +28,12 @@ namespace :drg do
     end
 
     desc 'Pins all gems [or the requested gem] to the latest available patch version'
-    task :latest_minor, [:gem_name] do |_, options|
+    task :minor_latest, [:gem_name] do |_, options|
       DRG::Tasks::ProgessivePinner.new(:minor).perform(options[:gem_name])
     end
 
     desc 'Pins all gems [or the requested gem] to the latest available minor version'
-    task :latest_patch, [:gem_name] do |_, options|
+    task :patch_latest, [:gem_name] do |_, options|
       DRG::Tasks::ProgessivePinner.new(:patch).perform(options[:gem_name])
     end
   end

@@ -24,8 +24,8 @@ rake drg:pin
 rake drg:pin:major
 rake drg:pin:minor
 rake drg:pin:patch
-rake drg:pin:latest_patch
-rake drg:pin:latest_minor
+rake drg:pin:patch_latest
+rake drg:pin:minor_latest
 rake drg:unpin
 ```
 
@@ -118,22 +118,22 @@ Pins your gems at the major level:
  rake drg:pin:major
  ```
 
-### drg:pin:latest_patch
+### drg:pin:patch_latest
 
 Updates the patch version for each outdated gem to the highest available version. This command should be run after `drg:pin` to ensure your gem versions are normalized.
 
  ```bash
- rake drg:pin:latest_patch         #=> updates all gems in the Gemfile
- rake drg:pin:latest_patch[<gem>]  #=> updates only the specified <gem>
+ rake drg:pin:patch_latest         #=> updates all gems in the Gemfile
+ rake drg:pin:patch_latest[<gem>]  #=> updates only the specified <gem>
  ```
 
-### drg:pin:latest_minor
+### drg:pin:minor_latest
 
-Same as `latest_patch` except it updates the minor version to the latest
+Same as `patch_latest` except it updates the minor version to the latest
 
  ```bash
- rake drg:pin:latest_minor         #=> updates all gems in the Gemfile
- rake drg:pin:latest_minor[<gem>]  #=> updates only the specified <gem>
+ rake drg:pin:minor_latest         #=> updates all gems in the Gemfile
+ rake drg:pin:minor_latest[<gem>]  #=> updates only the specified <gem>
  ```
 
 ### drg:unpin
