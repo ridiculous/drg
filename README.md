@@ -10,12 +10,30 @@ Add this line to your application's Gemfile:
 gem 'drg'
 ```
 
-## Usage
+## Tasks
 
-### Pinning Gems
+```bash
+rake drg:update
+rake drg:pin
+rake drg:pin:minor
+rake drg:pin:major
+rake drg:unpin
+```
+
+### drg:update
+
+DRG can update your outdated gems, one-by-one, to the latest version. It'll update the gem and then run your tests.
+If your tests pass, then the new version will be written to your Gemfile (similar to Gemnasium).
+
+```bash
+rake drg:update
+```
+
+### pin
 
 DRG really wants to help you manage your project's gems. But DRG doesn't want to replace Bundler. Instead we want to build on
-it. You can "pin" all your versions to the current version listed in the Gemfile.lock:
+it. Pinning ignores gems that are fetched from somewhere other than rubygems. For example, gems listed with `:git`, `:github`,
+or `:path` will be ignored. You can "pin" all your versions to the current version listed in the Gemfile.lock:
 
 ```bash
 rake drg:pin
@@ -27,8 +45,6 @@ Which will change gems list in your Gemfile to their full version. So if you hav
 gem 'rails'
 gem 'byebug', require: false
 gem 'therubyracer', '~> 0.12', platforms: :ruby
-
-# gotta include ourselves
 gem 'drg'
 ```
 
@@ -38,10 +54,10 @@ it'll get changed to
 gem 'rails', '4.2.3'
 gem 'byebug', '5.0.0', require: false
 gem 'therubyracer', '0.12.2', platforms: :ruby
-
-# gotta include ourselves
 gem 'drg', '0.4.1'
 ```
+
+### pin:minor
 
 Although, you may want to pin gems with their _minor_ version (which allows updating patches). Run:
 
@@ -49,7 +65,7 @@ Although, you may want to pin gems with their _minor_ version (which allows upda
 rake drg:pin:minor
 ```
 
-This will change a gem listed like
+Which will update your Gemfile from
 
 ```ruby
 gem 'rails', '4.2.3'
@@ -61,20 +77,22 @@ to
 gem 'rails', '~> 4.2'
 ```
 
-Pinning ignores gems that are fetched from somewhere other than rubygems. For example, gems listed with `:git`, `:github`, 
-or `:path` will be ignored.
-
-There is also a `rake drg:pin:major` which does what you think.
-
 This can be combined with `bundle update` to quickly update all gems to the latest patch or minor level.
 
-### Updating Gems
+### pin:major
 
-DRG can also try to update all outdated gems to the most recent version. It'll update the gem and run your tests. If your
-tests pass, then it'll update your gemfile with the current version. Similar to what Gemnasium offers (experience may vary).
+There is also a
+
+ ```bash
+ rake drg:pin:major
+ ```
+
+### drg:unpin
+
+Remove the versions from your Gemfile. Start fresh!
 
 ```bash
-rake drg:update
+rake drg:unpin
 ```
 
 ## Development

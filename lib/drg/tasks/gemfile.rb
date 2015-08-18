@@ -17,6 +17,7 @@ module DRG
       end
 
       def remove_version(gem)
+        saved_lines << lines.clone!
         lines[gem] = gem.remove_version
         write
       end
@@ -36,6 +37,16 @@ module DRG
             f << line
           end
         end
+      end
+
+      def rollback
+        return if saved_lines.empty?
+        lines.replace saved_lines.pop
+        write
+      end
+
+      def saved_lines
+        @saved_lines ||= []
       end
 
       def lines

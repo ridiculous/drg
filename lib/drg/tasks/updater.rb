@@ -16,41 +16,48 @@ module DRG
       # @todo Cleanup old gems when finished
       # @note `bundle outdated` returns lines that look like 'slop (newest 4.2.0, installed 3.6.0) in group "default"'
       def perform
-        `bundle outdated`.scan(/\s\*\s(.+)\s/).flatten.each do |item|
-          name = item[/([\-\w0-9]+)\s/, 1]
-          gem = gemfile.find_by_name(name)
-          next unless gem
-          latest_version = item[/newest\s([\d.\w]+)/, 1]
-          current_version = item[/installed\s([\d.\w]+)/, 1]
-          log(%Q[Trying to update gem "#{gem.name}" from #{current_version} to #{latest_version}])
-          try_update(gem, latest_version)
-        end
-        if $?.to_i.nonzero?
-          fail Bundler::GemNotFound, "Failed to load the environment. Maybe do `bundle` and try again"
+        log 'Searching for outdated gems ....'
+        outdated = `bundle outdated`.scan(/\s\*\s(.+)\s/).flatten
+        gems = outdated.map do |item|
+          gem = OpenStruct.new
+          gem.name = item[/([\-\w0-9]+)\s/, 1]
+          gem.entry = gemfile.find_by_name(gem.name)
+          next unless gem.entry
+          gem.latest_version = item[/newest\s([\d.\w]+)/, 1]
+          gem.current_version = item[/installed\s([\d.\w]+)/, 1]
+          gem
+        end.compact
+        if gems.any?
+          gems.each &method(:try_update)
+        else
+          log 'All gems up to date!'
         end
       end
 
-      # @param [GemfileLine] gem
-      def try_update(gem, latest_version)
-        gemfile.remove_version gem
+      # @param [OpenStruct] gem
+      def try_update(gem)
+        log(%Q[Updating "#{gem.name}" from #{gem.current_version} to #{gem.latest_version}])
+        gemfile.remove_version gem.entry
         bundler.update(gem.name)
         if $0.to_i.zero?
-          log(%Q[Succeeded in installing "#{gem.name}" (#{latest_version})])
+          log(%Q[Succeeded in installing "#{gem.name}" (#{gem.latest_version})])
           if system('rake')
-            log(%Q[Tests passed! Updating Gemfile with ... "#{gem.name}" (#{latest_version})])
-            gemfile.update(gem, latest_version)
+            log(%Q[Tests passed! Updating Gemfile entry for "#{gem.name}" to #{gem.latest_version}])
+            gemfile.update(gem.entry, gem.latest_version)
           else
             failures << gem.name
           end
         else
           fail StandardError, %Q[Failed to update "#{gem.name}"]
         end
-      rescue Bundler::GemNotFound, Bundler::InstallError
-        log %Q[Failed to find "#{gem.name}" (#{latest_version})]
-      rescue Bundler::VersionConflict
-        # @todo retry it later
+      rescue Bundler::GemNotFound, Bundler::InstallError, Bundler::VersionConflict => e
+        log %Q[Failed to find a compatible of "#{gem.name}" (#{gem.latest_version}): #{e.class} #{e.message}]
+        gemfile.rollback
         failures << gem.name
-        log %Q(Failed to find a compatible version of "#{gem.name}")
+          # @todo retry it later
+      rescue => e
+        puts "#{e.class}: #{e.message} #{e.backtrace}"
+        gemfile.rollback
       end
 
       # @note not used

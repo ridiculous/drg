@@ -3,6 +3,15 @@ require 'spec_helper'
 describe DRG::Tasks::Gemfile do
   let(:gem) { subject.find_by_name('pry') }
 
+  describe '#remove_version' do
+    before { allow(subject).to receive(:write) }
+
+    it 'assigns the current value of @lines to @saved_lines' do
+      original_lines = subject.lines.clone!
+      expect { subject.remove_version(gem) }.to change { subject.saved_lines }.from([]).to([original_lines])
+    end
+  end
+
   describe '#update' do
     before { allow(subject).to receive(:write) }
 

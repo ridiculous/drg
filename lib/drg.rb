@@ -3,9 +3,10 @@ require 'set'
 require 'bundler'
 require 'bundler/cli'
 require 'drg/version'
+require 'duck_puncher'
 
 # defines #clone!
-# DuckPuncher.load! :Object
+DuckPuncher.load! :Object
 
 module DRG
   autoload :FileReader, 'drg/file_reader'
