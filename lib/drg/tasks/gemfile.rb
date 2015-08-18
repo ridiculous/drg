@@ -12,8 +12,9 @@ module DRG
       # @param [GemfileLine] gem
       # @param [String] version to update the gem line with
       def update(gem, version)
-        @saved_lines = Marshal.load Marshal.dump(lines)
+        saved_lines << lines.clone!
         lines[gem] = gem.update version
+        write
       end
 
       def find_by_name(name)
@@ -25,14 +26,6 @@ module DRG
         nil
       end
 
-      def lines
-        @lines ||= File.readlines file
-      end
-
-      def saved_lines
-        @saved_lines ||= lines
-      end
-
       def write
         File.open file, 'wb' do |f|
           lines.each do |line|
@@ -42,8 +35,16 @@ module DRG
       end
 
       def rollback
-        @lines = saved_lines
+        lines.replace saved_lines.pop
         write
+      end
+
+      def lines
+        @lines ||= File.readlines file
+      end
+
+      def saved_lines
+        @saved_lines ||= []
       end
     end
   end

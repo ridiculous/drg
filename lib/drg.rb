@@ -2,7 +2,11 @@ require 'ostruct'
 require 'set'
 require 'bundler'
 require 'bundler/cli'
+require 'duck_puncher'
 require 'drg/version'
+
+# defines #clone!
+DuckPuncher.load! :Object
 
 module DRG
   autoload :FileReader, 'drg/file_reader'

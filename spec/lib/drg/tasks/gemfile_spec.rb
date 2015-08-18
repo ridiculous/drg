@@ -1,14 +1,27 @@
 require 'spec_helper'
 
 describe DRG::Tasks::Gemfile do
+  let(:gem) { subject.find_by_name('pry') }
+
   describe '#update' do
+    before { allow(subject).to receive(:write) }
+
+    it 'calls +write+ after updating the @lines' do
+      expect(subject).to receive(:write)
+      expect(gem).to receive(:update).with('0.10.1')
+      subject.update(gem, '0.10.1')
+    end
+
+    it 'assigns the current value of @lines to @saved_lines' do
+      original_lines = subject.lines.clone!
+      expect { subject.update(gem, '0.10.1') }.to change { subject.saved_lines }.from([]).to([original_lines])
+    end
+
     it 'updates the gem index in @lines to the given -version-' do
-      gem = subject.find_by_name('pry')
       expect { subject.update(gem, '0.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '0.10.1'\n))
     end
 
     it 'updates the "pry" gem to the given -version-' do
-      gem = subject.find_by_name('pry')
       expect {
         subject.update(gem, '0.10.1')
       }.to change(gem, :to_s).from(%Q(  gem "pry", '~> 0.10'\n)).to(%Q(  gem "pry", '0.10.1'\n))
@@ -38,16 +51,16 @@ describe DRG::Tasks::Gemfile do
 
   describe '#find_by_name' do
     it 'returns an object that responds to +version+' do
-      expect(subject.find_by_name('pry')).to respond_to(:version)
+      expect(gem).to respond_to(:version)
     end
 
     it 'returns an object that responds to +index+' do
-      expect(subject.find_by_name('pry')).to respond_to(:index)
+      expect(gem).to respond_to(:index)
     end
 
     context 'when the gem is listed with double quotes' do
       it 'returns the line with the gem' do
-        expect(subject.find_by_name('pry')).to eq(%Q(  gem "pry", '~> 0.10'\n))
+        expect(gem).to eq(%Q(  gem "pry", '~> 0.10'\n))
       end
     end
 

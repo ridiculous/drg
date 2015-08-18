@@ -25,27 +25,30 @@ module DRG
           log(%Q[Trying to update gem "#{gem.name}" from #{current_version} to #{latest_version}])
           try_update(gem, latest_version)
         end
+        if $?.to_i.nonzero?
+          fail Bundler::GemNotFound, "Failed to load the environment. Maybe do `bundle` and try again"
+        end
       end
 
       # @param [GemfileLine] gem
       def try_update(gem, latest_version)
-        gemfile.update(gem, latest_version)
-        gemfile.write
         bundler.update(gem.name)
+        if $0.to_i.zero?
+          log(%Q[Succeeded in installing "#{gem.name}" (#{latest_version})])
+          if system('rake')
+            gemfile.update(gem, latest_version)
+          else
+            failures << gem.name
+          end
+        else
+          fail StandardError, %Q[Failed to update "#{gem.name}"]
+        end
       rescue Bundler::GemNotFound, Bundler::InstallError
         log %Q[Failed to find "#{gem.name}" (#{latest_version})]
-        gemfile.rollback
       rescue Bundler::VersionConflict
         # @todo retry it later
         failures << gem.name
-        gemfile.rollback
         log %Q(Failed to find a compatible version of "#{gem.name}")
-      else
-        log(%Q[Succeeded in installing "#{gem.name}" (#{latest_version})])
-        unless system('rake')
-          failures << gem.name
-          gemfile.rollback
-        end
       end
 
       # @note not used
