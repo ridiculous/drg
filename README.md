@@ -50,7 +50,7 @@ or `:path` will be ignored. You can "pin" all your versions to the current versi
 rake drg:pin
 ```
 
-Will update a Gemfile to their full version:
+Will update a Gemfile with the gem's full version. It'll change a Gemfile from:
 
 ```ruby
 gem 'rails'
@@ -59,7 +59,7 @@ gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'drg' # need this
 ```
 
-to
+to:
 
 ```ruby
 gem 'rails', '4.2.3'
