@@ -50,7 +50,7 @@ or `:path` will be ignored. You can "pin" all your versions to the current versi
 rake drg:pin
 ```
 
-Will update a Gemfile with the gem's full version. It'll change a Gemfile from:
+This task will update your Gemfile with the gem's full version. It'll change:
 
 ```ruby
 gem 'rails'
@@ -70,19 +70,19 @@ gem 'drg', '0.4.1' # need this
 
 ### drg:pin:minor
 
-Want to pin gems at their _minor_ version?
+Want to pin gems at their __minor__ version?
 
 ```bash
 rake drg:pin:minor
 ```
 
-Will update a Gemfile
+This task will update your Gemfile with the approximate gem's minor version. It'll change:
 
 ```ruby
 gem 'rails', '4.2.3'
 ```
 
-to 
+to:
 
 ```ruby
 gem 'rails', '~> 4.2'
@@ -90,13 +90,13 @@ gem 'rails', '~> 4.2'
 
 ### drg:pin:patch
 
-Want to pin gems at their _patch_ version?
+Want to pin gems at their __patch__ version?
 
 ```bash
 rake drg:pin:minor
 ```
 
-Will update a Gemfile
+This task will update your Gemfile with the approximate gem's patch version. It'll change:
 
 ```ruby
 gem 'rails', '4.2.3'
@@ -108,7 +108,7 @@ to
 gem 'rails', '~> 4.2.3'
 ```
 
-This can be combined with `bundle update` to quickly update all gems to the latest patch or minor level.
+This can be combined with `bundle update` to quickly update all gems to the latest version.
 
 ### drg:pin:major
 
@@ -120,7 +120,7 @@ Pins your gems at the major level:
 
 ### drg:pin:patch_latest
 
-Updates the patch version for each outdated gem to the highest available version. This command should be run after `drg:pin` to ensure your gem versions are normalized.
+Updates the patch version for each outdated gem to the latest version:
 
  ```bash
  rake drg:pin:patch_latest         #=> updates all gems in the Gemfile
@@ -138,7 +138,7 @@ Same as `patch_latest` except it updates the minor version to the latest
 
 ### drg:unpin
 
-Remove the versions from your Gemfile. Start fresh!
+Remove the versions from your Gemfile. A clean start!
 
 ```bash
 rake drg:unpin
