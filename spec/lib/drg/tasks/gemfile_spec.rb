@@ -103,6 +103,13 @@ describe DRG::Tasks::Gemfile do
         expect(subject.find_by_name('pg')).to be_nil
       end
     end
+
+    context 'when the requested gem is commented out' do
+      it 'returns nil' do
+        expect(subject.find_by_name('rubocop')).to be_nil
+        expect(subject.find_by_name('duck_puncher')).to be_nil
+      end
+    end
   end
 
   describe '#lines' do
