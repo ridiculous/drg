@@ -29,17 +29,20 @@ module DRG
         Updater.new.perform method(:update_handler)
       end
 
-      def update_handler(gem)
-        update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem.name }
+      def update_handler(gems)
+        load_versions gems.map &:name
+        gems.each do |gem|
+          update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem.name }
+        end
       end
 
+      # @note calls #latest_minor_version and #latest_patch_version
       def update(spec)
         gem = gemfile.find_by_name spec.name
         if gem
-          log %Q[Searching for latest #{type} version of "#{spec.name}" (currently #{spec.version.to_s}) ...]
           latest_version = public_send("latest_#{type}_version", spec.name, spec.version)
           if latest_version
-            log "Updating to version #{latest_version}"
+            log %Q(Updating "#{spec.name}" from #{spec.version.to_s} to #{latest_version})
             gemfile.update gem, latest_version
             updated_gems << gem.name
           else
@@ -79,14 +82,27 @@ module DRG
       # @param [String] name of the gem
       # @return [Array] a list of available versions (e.g. ['1.2.0', '1.1.0'])
       def versions(name)
-        @versions[name] ||= `gem query -radn ^#{name}$`.scan(/([\d.]+),/).flatten.uniq
+        @versions[name] ||= begin
+          log %Q(Searching for latest #{type} version of "#{name}" ...)
+          `gem query -radn ^#{name}$`.scan(/([\d.]+),/).flatten.uniq
+        end
       end
 
+      def load_versions(gems)
+        load_gem_versions(gems).scan(/^(#{Array(gems).join('|')})\s\(([\d.\s,\w\-]+)\)$/).each do |gem_name, versions|
+          @versions[gem_name] = versions.to_s.split(', ')
+        end
+      end
+
+      def load_gem_versions(gems)
+        log %Q(Searching for latest #{type} versions of #{gems.join(' ')} ...)
+        `gem query -ra #{gems.join(' ')}`
+      end
+
+      # @param [Array] list of a gem version's segments
+      # @param [Array] other_list of another gem version's segments
       def higher?(list, other_list)
-        return true if list[0].to_i > other_list[0].to_i
-        return true if list[1].to_i > other_list[1].to_i
-        return true if list[2].to_i > other_list[2].to_i
-        false
+        list[0].to_i > other_list[0].to_i || list[1].to_i > other_list[1].to_i || list[2].to_i > other_list[2].to_i
       end
 
       # @todo delete if not used
