@@ -59,7 +59,7 @@ gem 'therubyracer', '~> 0.12', platforms: :ruby
 gem 'drg' # need this
 ```
 
-it'll get changed to
+to
 
 ```ruby
 gem 'rails', '4.2.3'
