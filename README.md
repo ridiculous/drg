@@ -1,8 +1,7 @@
 # DRG
 
-A Ruby utility to help automate common tasks! Currently includes enhanced dependency management using Bundler. You
-can pin Gem versions to the current or the next available level (major, minor, or patch). Can also automatically
-update your gems to the latest available version.
+A Ruby utility to help automate dependency management using Bundler. You can pin Gem versions to the current or the next
+available level. DRG can automatically update your gems to the latest available version, similar to Gemnasium.
 
 ## Requirements
 
