@@ -27,6 +27,11 @@ namespace :drg do
       DRG::Tasks::Pinner.new(:patch).perform
     end
 
+    desc 'Pins all gems [or the requested gem] to the latest version'
+    task :latest, [:gem_name] do |_, options|
+      DRG::Tasks::ProgessivePinner.new(:available).perform(options[:gem_name])
+    end
+
     desc 'Pins all gems [or the requested gem] to the latest available patch version'
     task :minor_latest, [:gem_name] do |_, options|
       DRG::Tasks::ProgessivePinner.new(:minor).perform(options[:gem_name])
@@ -36,10 +41,5 @@ namespace :drg do
     task :patch_latest, [:gem_name] do |_, options|
       DRG::Tasks::ProgessivePinner.new(:patch).perform(options[:gem_name])
     end
-  end
-
-  desc 'Updates your gems in the Gemfile to the latest compatible version'
-  task :update do
-    DRG::Tasks::Updater.new.perform
   end
 end

@@ -3,7 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg)
 
 A Ruby utility to help automate dependency management using Bundler. You can pin Gem versions to the current or the next
-available level. DRG can automatically update your gems to the latest available version, similar to Gemnasium.
+available level.
 
 ## Requirements
 
@@ -20,26 +20,15 @@ gem 'drg'
 ## Tasks
 
 ```bash
-rake drg:update
 rake drg:pin
 rake drg:pin:major
 rake drg:pin:minor
 rake drg:pin:patch
+rake drg:pin:latest
 rake drg:pin:patch_latest
 rake drg:pin:minor_latest
 rake drg:unpin
 ```
-
-### drg:update
-
-DRG loves updating gems! Run this command to check for outdated gems and try to update them to the latest available version.
-Each outdated gem will be updated, then DRG will run your tests (with `rake`) and if your tests pass, the new version will be written to your Gemfile!
-
-```bash
-rake drg:update
-```
-
-Easy!
 
 ### drg:pin
 

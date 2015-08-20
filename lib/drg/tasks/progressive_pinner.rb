@@ -6,7 +6,7 @@ module DRG
       attr_reader :gemfile, :type, :updated_gems
       attr_writer :versions
 
-      # @param [Symbol] type of pin to perform. Available options are [:major, :minor, :patch]
+      # @param [Symbol] type of pin to perform. Available options are [:available, :minor, :patch]
       def initialize(type = :patch)
         @type = type
         @gemfile = Gemfile.new
@@ -18,22 +18,15 @@ module DRG
         if gem_name
           update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem_name }
         else
-          update_all
+          Updater.new.perform do |gems|
+            load_versions gems.map &:name
+            gems.each do |gem|
+              update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem.name }
+            end
+          end
         end
         gemfile.write if gemfile.saved_lines.any?
         log %Q(Done.#{' You may want run `bundle update`' if updated_gems.any?})
-      end
-
-      def update_all
-        log %Q(No gem specified)
-        Updater.new.perform method(:update_handler)
-      end
-
-      def update_handler(gems)
-        load_versions gems.map &:name
-        gems.each do |gem|
-          update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem.name }
-        end
       end
 
       # @note calls #latest_minor_version and #latest_patch_version
@@ -49,6 +42,14 @@ module DRG
             log %Q(No newer #{type} versions found)
           end
         end
+      end
+
+      #
+      # Private
+      #
+
+      def latest_available_version(name, current_version)
+        new_versions(name, current_version).first
       end
 
       # @param [String] name of the gem
@@ -95,6 +96,7 @@ module DRG
       end
 
       def load_gem_versions(gems)
+        gems.reject! { |gem_name| gemfile.find_by_name(gem_name).nil? }
         log %Q(Searching for latest #{type} versions of #{gems.join(' ')} ...)
         `gem query -ra #{gems.join(' ')}`
       end
@@ -104,19 +106,6 @@ module DRG
       def higher?(list, other_list)
         list[0].to_i > other_list[0].to_i || list[1].to_i > other_list[1].to_i || list[2].to_i > other_list[2].to_i
       end
-
-      # @todo delete if not used
-      #
-      # @param [String] name of the gem
-      # @param [String] current_version of the gem
-      # def next_patch_version(name, current_version)
-      #   new_versions(name, current_version).select { |version|
-      #     puts segments = version.scan(/\d+/)
-      #     patch_version = segments.last.to_i
-      #     minor_version = segments[-2].to_i
-      #     patch_version > current_version.segments[-1] && minor_version <= current_version.segments[-2]
-      #   }.last
-      # end
     end
   end
 end
