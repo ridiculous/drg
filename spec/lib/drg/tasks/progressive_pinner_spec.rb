@@ -81,18 +81,4 @@ describe DRG::Tasks::ProgessivePinner do
       end
     end
   end
-
-  # describe '#next_patch_version' do
-  #   context 'when there are new versions available' do
-  #     it 'returns the next available patch' do
-  #       expect(subject.next_patch_version('pg', Gem::Version.new('0.18.0'))).to eq '0.18.1'
-  #     end
-  #   end
-  #
-  #   context 'when using the latest version' do
-  #     it 'returns nil' do
-  #       expect(subject.next_patch_version('pg', Gem::Version.new('0.19.1'))).to eq nil
-  #     end
-  #   end
-  # end
 end

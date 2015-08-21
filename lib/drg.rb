@@ -1,7 +1,6 @@
 require 'ostruct'
 require 'set'
 require 'bundler'
-require 'bundler/cli'
 require 'drg/version'
 require 'duck_puncher'
 require 'highline/import'
