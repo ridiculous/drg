@@ -108,6 +108,15 @@ Pins your gems at the major level:
  rake drg:pin:major
  ```
 
+### drg:pin:latest
+
+Updates each outdated gem to the latest available version:
+
+ ```bash
+ rake drg:pin:latest         #=> updates all gems in the Gemfile
+ rake drg:pin:latest[<gem>]  #=> updates only the specified <gem>
+ ```
+
 ### drg:pin:patch_latest
 
 Updates the patch version for each outdated gem to the latest version:

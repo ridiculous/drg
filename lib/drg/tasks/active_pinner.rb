@@ -3,7 +3,7 @@ module DRG
     class ActivePinnner
       include Log
 
-      attr_reader :gemfile, :type, :updated_gems
+      attr_reader :gemfile, :type
       attr_writer :versions
 
       # @param [Symbol] type of pin to perform. Available options are [:available, :minor, :patch]
@@ -11,7 +11,6 @@ module DRG
         @type = type
         @gemfile = Gemfile.new
         @versions = {}
-        @updated_gems = Set.new
       end
 
       def perform(gem_name = nil)
@@ -23,8 +22,11 @@ module DRG
             gems.each &method(:update)
           end
         end
-        gemfile.write if gemfile.saved_lines.any?
-        log %Q(Done.#{' You may want run `bundle update`' if updated_gems.any?})
+        log %Q(Done)
+        if gemfile.saved_lines.any?
+          gemfile.write
+          log %Q(You may want run `bundle update`)
+        end
       end
 
       # @note calls #latest_minor_version and #latest_patch_version
@@ -36,7 +38,6 @@ module DRG
           if latest_version
             log %Q(Updating "#{spec.name}" from #{spec.version.to_s} to #{latest_version})
             gemfile.update gem, latest_version
-            updated_gems << gem.name
           else
             log %Q(No newer #{type} versions found)
           end
@@ -95,7 +96,7 @@ module DRG
       end
 
       def load_gem_versions(gems)
-        log %Q(Searching for latest #{type} versions of #{gems.join(' ')} ...)
+        log %Q(Searching for latest #{type} version of #{gems.join(' ')} ...)
         `gem query -ra #{gems.join(' ')}`
       end
 
