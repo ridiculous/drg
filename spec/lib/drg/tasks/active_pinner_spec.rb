@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DRG::Tasks::ProgessivePinner do
+describe DRG::Tasks::ActivePinnner do
   let(:versions) { ['1.0.0', '0.19.1', '0.19.0', '0.18.10', '0.18.3', '0.18.2', '0.18.1', '0.18.0', '0.9.0', '0.8.0', '0.7.9.2008.10.13', '0.7.9.2008.03.18', '0.7.9.2008.02.05', '32'] }
 
   describe '#latest_patch_version' do

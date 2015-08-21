@@ -1,6 +1,6 @@
 module DRG
   module Tasks
-    class ProgessivePinner
+    class ActivePinnner
       include Log
 
       attr_reader :gemfile, :type, :updated_gems
@@ -16,13 +16,11 @@ module DRG
 
       def perform(gem_name = nil)
         if gem_name
-          update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem_name }
+          update gem_name
         else
           Updater.new.perform do |gems|
-            load_versions gems.map &:name
-            gems.each do |gem|
-              update ::Bundler.locked_gems.specs.find { |spec| spec.name == gem.name }
-            end
+            load_versions gems
+            gems.each &method(:update)
           end
         end
         gemfile.write if gemfile.saved_lines.any?
@@ -30,8 +28,9 @@ module DRG
       end
 
       # @note calls #latest_minor_version and #latest_patch_version
-      def update(spec)
-        gem = gemfile.find_by_name spec.name
+      def update(gem_name)
+        spec = ::Bundler.locked_gems.specs.find { |spec| spec.name == gem_name }
+        gem = spec && gemfile.find_by_name(spec.name)
         if gem
           latest_version = public_send("latest_#{type}_version", spec.name, spec.version)
           if latest_version
@@ -96,7 +95,6 @@ module DRG
       end
 
       def load_gem_versions(gems)
-        gems.reject! { |gem_name| gemfile.find_by_name(gem_name).nil? }
         log %Q(Searching for latest #{type} versions of #{gems.join(' ')} ...)
         `gem query -ra #{gems.join(' ')}`
       end
