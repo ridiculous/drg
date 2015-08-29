@@ -39,7 +39,7 @@ module DRG
             log %Q(Updating "#{spec.name}" from #{spec.version.to_s} to #{latest_version})
             gemfile.update gem, latest_version
           else
-            log %Q(No newer #{type} versions found)
+            log %Q(No newer #{type} versions found for "#{spec.name}")
           end
         end
       end
@@ -91,12 +91,12 @@ module DRG
 
       def load_versions(gems)
         load_gem_versions(gems).scan(/^(#{Array(gems).join('|')})\s\(([\d.\s,\w\-]+)\)$/).each do |gem_name, versions|
-          @versions[gem_name] = versions.to_s.split(', ')
+          @versions[gem_name] = versions.to_s.split(', ').map { |x| x[/([\d.\w\-]+)/, 1] }.compact
         end
       end
 
       def load_gem_versions(gems)
-        log %Q(Searching for latest #{type} version of #{gems.join(' ')} ...)
+        log %Q(Searching for latest #{type} version of #{gems.join(', ')} ...)
         `gem query -ra #{gems.join(' ')}`
       end
 
