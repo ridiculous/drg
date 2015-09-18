@@ -12,8 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{DRG that Gemfile! The missing bundler extension. Gem version automation with Bundler}
   spec.homepage      = "https://github.com/ridiculous/drg"
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.executables   = []
   spec.require_paths = ["lib"]
 
   # spec.add_dependency 'ruby_parser', '>= 3.7.0', '< 4.0.0'
