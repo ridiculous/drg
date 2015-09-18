@@ -23,10 +23,7 @@ module DRG
           end
         end
         log %Q(Done)
-        if gemfile.saved_lines.any?
-          gemfile.write
-          log %Q(You may want run `bundle update`)
-        end
+        gemfile.write if gemfile.saved_lines.any?
       end
 
       # @note calls #latest_minor_version and #latest_patch_version
@@ -57,9 +54,9 @@ module DRG
       def latest_minor_version(name, current_version)
         new_versions(name, current_version).select { |version|
           segments = version.scan(/\d+/)
-          major_version = segments[0].to_i
-          minor_version = segments[1].to_i
-          minor_version > current_version.segments[1] && major_version == current_version.segments[0]
+          major = segments[0].to_i
+          minor = segments[1].to_i
+          minor > current_version.segments[1] && major == current_version.segments[0]
         }.first
       end
 
@@ -68,9 +65,10 @@ module DRG
       def latest_patch_version(name, current_version)
         new_versions(name, current_version).select { |version|
           segments = version.scan(/\d+/)
-          patch_version = segments[-1].to_i
-          minor_version = segments[1].to_i
-          patch_version > current_version.segments[-1] && minor_version == current_version.segments[1]
+          major = segments[0].to_i
+          patch = segments[-1].to_i
+          minor = segments[1].to_i
+          patch > current_version.segments[-1] && minor == current_version.segments[1] && major == current_version.segments[0]
         }.first
       end
 
