@@ -110,6 +110,15 @@ describe DRG::Tasks::Gemfile do
         expect(subject.find_by_name('duck_puncher')).to be_nil
       end
     end
+
+    context 'when the line has a @drg comment specifying to skip the gem' do
+      it 'returns nil' do
+        expect(subject).to receive(:lines).and_return ["gem 'slop'", "  gem 'byebug', require: false\n"]
+        expect(subject.find_by_name('slop')).to be_a DRG::Tasks::GemfileLine
+        expect(subject).to receive(:lines).and_return ["gem 'slop'  # @drg  skip", "  gem 'byebug', require: false\n"]
+        expect(subject.find_by_name('slop')).to be_nil
+      end
+    end
   end
 
   describe '#lines' do

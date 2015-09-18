@@ -143,6 +143,14 @@ Remove the versions from your Gemfile. A clean start!
 rake drg:unpin
 ```
 
+### Skipping gems
+
+You can tell drg to ignore gems by adding an inline comment with @drg (skip|ignore|frozen)
+
+```ruby
+gem 'name' # @drg skip
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. 

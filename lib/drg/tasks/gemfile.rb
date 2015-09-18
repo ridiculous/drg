@@ -27,6 +27,7 @@ module DRG
           next if line =~ /^\s*#/
           next if line =~ /:?path:?\s*(=>)?\s*/
           next if line =~ /:?git(hub)?:?\s*(=>)?\s*/
+          next if line =~ /@drg\s+(frozen|ignore|skip)/
           return GemfileLine.new line, index, name if line =~ /gem\s*['"]#{name}["']/
         end
         nil
