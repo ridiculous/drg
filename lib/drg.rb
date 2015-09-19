@@ -6,7 +6,7 @@ require 'duck_puncher'
 require 'highline/import'
 
 # defines #clone!
-DuckPuncher.load! :Object
+DuckPuncher.punch! :Object
 
 module DRG
   # autoload :FileReader, 'drg/file_reader'
