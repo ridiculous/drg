@@ -41,5 +41,9 @@ namespace :drg do
     task :patch_latest, [:gem_name] do |_, options|
       DRG::Tasks::ActivePinnner.new(:patch).perform(options[:gem_name])
     end
+
+    # aliases
+    task latest_minor: :minor_latest
+    task latest_patch: :patch_latest
   end
 end
