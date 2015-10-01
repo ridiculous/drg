@@ -9,6 +9,7 @@ require 'highline/import'
 DuckPuncher.punch! :Object
 
 module DRG
+  autoload :Ruby, 'drg/ruby'
   # autoload :FileReader, 'drg/file_reader'
   # autoload :Scanner, 'drg/scanner'
   # autoload :Judge, 'drg/judge'
