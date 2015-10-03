@@ -29,17 +29,17 @@ namespace :drg do
 
     desc 'Pins all gems [or the requested gem] to the latest version'
     task :latest, [:gem_name] do |_, options|
-      DRG::Tasks::ActivePinnner.new(:available).perform(options[:gem_name])
+      DRG::Tasks::ActivePinner.new(:available).perform(options[:gem_name])
     end
 
     desc 'Pins all gems [or the requested gem] to the latest available patch version'
     task :minor_latest, [:gem_name] do |_, options|
-      DRG::Tasks::ActivePinnner.new(:minor).perform(options[:gem_name])
+      DRG::Tasks::ActivePinner.new(:minor).perform(options[:gem_name])
     end
 
     desc 'Pins all gems [or the requested gem] to the latest available minor version'
     task :patch_latest, [:gem_name] do |_, options|
-      DRG::Tasks::ActivePinnner.new(:patch).perform(options[:gem_name])
+      DRG::Tasks::ActivePinner.new(:patch).perform(options[:gem_name])
     end
 
     # aliases

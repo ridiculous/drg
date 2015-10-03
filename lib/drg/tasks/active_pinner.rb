@@ -1,6 +1,6 @@
 module DRG
   module Tasks
-    class ActivePinnner
+    class ActivePinner
       include Log
 
       attr_reader :gemfile, :type
