@@ -1,15 +1,14 @@
 require 'spec_helper'
-require 'drg/ruby'
 
-describe DRG::Ruby do
+describe DRG::Ruby::Const do
   subject { described_class.new file }
 
-  describe '#const_name' do
+  describe '#name' do
     context 'when given a module' do
       let(:file) { FIXTURE_ROOT.join('extensions.rb') }
 
       it "returns the module's name" do
-        expect(subject.const_name).to eq 'Extensions'
+        expect(subject.name).to eq 'Extensions'
       end
     end
 
@@ -17,14 +16,14 @@ describe DRG::Ruby do
       let(:file) { FIXTURE_ROOT.join('report.rb') }
 
       it 'returns the class names' do
-        expect(subject.const_name).to eq 'Report'
+        expect(subject.name).to eq 'Report'
       end
 
       context 'with inheritance' do
         let(:file) { FIXTURE_ROOT.join('controllers', 'reservations_controller.rb') }
 
         it 'returns the class names in the file' do
-          expect(subject.const_name).to eq 'ReservationsController'
+          expect(subject.name).to eq 'ReservationsController'
         end
       end
 
@@ -32,7 +31,7 @@ describe DRG::Ruby do
         let(:file) { FIXTURE_ROOT.join('extensions', 'array.rb') }
 
         it 'returns the full modularized name' do
-          expect(subject.const_name).to eq 'Extensions::Array'
+          expect(subject.name).to eq 'Extensions::Array'
         end
       end
 
@@ -40,7 +39,7 @@ describe DRG::Ruby do
         let(:file) { FIXTURE_ROOT.join('adhoc_class.rb') }
 
         it 'returns the class name' do
-          expect(subject.const_name).to eq 'Go'
+          expect(subject.name).to eq 'Go'
         end
       end
 
@@ -48,7 +47,7 @@ describe DRG::Ruby do
         let(:file) { FIXTURE_ROOT.join('controllers', 'admin', 'users_controller.rb') }
 
         it 'returns the class name' do
-          expect(subject.const_name).to eq 'Admin::Super::UsersController'
+          expect(subject.name).to eq 'Admin::Super::UsersController'
         end
       end
     end

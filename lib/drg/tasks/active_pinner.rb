@@ -66,8 +66,8 @@ module DRG
         new_versions(name, current_version).select { |version|
           segments = version.scan(/\d+/)
           major = segments[0].to_i
-          patch = segments[-1].to_i
           minor = segments[1].to_i
+          patch = segments[-1].to_i
           patch > current_version.segments[-1] && minor == current_version.segments[1] && major == current_version.segments[0]
         }.first
       end
