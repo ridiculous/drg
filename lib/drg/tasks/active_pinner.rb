@@ -101,7 +101,7 @@ module DRG
       # @param [Array] list of a gem version's segments
       # @param [Array] other_list of another gem version's segments
       def higher?(list, other_list)
-        list[0].to_i > other_list[0].to_i || list[1].to_i > other_list[1].to_i || list[2].to_i > other_list[2].to_i
+        (0..2).to_a.any? { |i| list[i].to_i > other_list[i].to_i }
       end
     end
   end
