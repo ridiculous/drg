@@ -1,6 +1,9 @@
 module DRG
   module Tasks
     class Gemfile
+      # defines Object#clone!
+      DuckPuncher.punch! :Object
+
       attr_accessor :file
 
       def initialize(file = ::Bundler.default_gemfile)

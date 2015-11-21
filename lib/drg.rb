@@ -3,10 +3,6 @@ require 'set'
 require 'bundler'
 require 'duck_puncher'
 require 'highline/import'
-
-# defines Object#clone!
-DuckPuncher.punch! :Object
-
 require 'drg/version'
 
 module DRG
