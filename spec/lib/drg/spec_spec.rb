@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DRG::Spec do
-  let(:file) { FIXTURE_ROOT.join('report.rb') }
+  let(:file) { FIXTURE_ROOT.join('report') }
 
   subject { described_class.new file }
 
