@@ -8,6 +8,8 @@ describe DRG::Spec do
   describe '.generate' do
     it 'returns the spec for the given file as an array of lines' do
       expect(described_class.generate(file).join("\n")).to eq <<-RUBY
+require "spec_helper"
+
 describe Report do
   let(:message) {}
 
@@ -20,10 +22,9 @@ describe Report do
       end
     end
 
-    context "if verification_code" do
+    context "when verification_code" do
       before {}
     end
-
   end
 
   describe ".process" do
@@ -42,10 +43,9 @@ describe Report do
       end
     end
 
-    context "if val" do
+    context "when val" do
       before {}
     end
-
   end
 
   describe "#call" do
@@ -55,10 +55,9 @@ describe Report do
       end
     end
 
-    context "if message[:verification_code_id]" do
+    context "when message[:verification_code_id]" do
       before {}
     end
-
     context "duder = (1 == 2)" do
       before {}
       it "(0)" do
@@ -68,25 +67,22 @@ describe Report do
     context "not duder = (1 == 2)" do
       before {}
     end
-
-    context "if report.save then" do
+    context "when report.save" do
       before {}
-      context "if user.wants_mail?" do
+      context "when user.wants_mail?" do
         before {}
         it "UserMailer.spam(user).deliver_now" do
         end
       end
 
-      context "if not user.wants_mail?" do
+      context "unless user.wants_mail?" do
         before {}
       end
-
     end
 
-    context "if not report.save then" do
+    context "unless report.save" do
       before {}
     end
-
   end
 
   describe "#report" do
