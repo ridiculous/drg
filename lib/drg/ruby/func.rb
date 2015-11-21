@@ -2,14 +2,9 @@ class DRG::Ruby::Func < Struct.new(:sexp, :_private)
   alias private? _private
 
   def conditions
-    list = []
-    sexp.each_sexp do |exp|
-      next unless exp.is_a?(Sexp)
-      if exp.first == :if or exp.flatten.include?(:if)
-        list << DRG::Ruby::Condition.new(exp)
-      end
+    DRG::Decorators::SexpDecorator.new(sexp).each_sexp_condition.map do |exp|
+      DRG::Ruby::Condition.new(exp)
     end
-    list
   end
 
   # @note we drop(1) to get rid of :args (which should be the first item in the sexp)
