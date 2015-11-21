@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DRG::Ruby::Func do
-  let(:klass) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).klass }
+  let(:klass) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).const }
   let(:sexp) { klass.funcs.find { |x| x.name == :call }.sexp }
   let(:_private) { false }
 
@@ -12,7 +12,7 @@ describe DRG::Ruby::Func do
       it 'returns the ast rep of the condition' do
         cond = subject.conditions.map(&:nested_conditions).reject(&:empty?)
         expect(subject.conditions.length).to eq 3
-        expect(cond.flatten.m(:statement)).to eq ["UserMailer.spam(user).deliver_now if user.wants_mail?"]
+        expect(cond.flatten.map(&:statement)).to eq ["UserMailer.spam(user).deliver_now if user.wants_mail?"]
       end
     end
   end

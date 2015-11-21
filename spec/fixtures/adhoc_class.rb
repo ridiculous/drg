@@ -1,5 +1,7 @@
+require_relative 'extensions'
+
 Go = Class.new(String) do
-  include Extensions::Array
+  include Extensions
   def now
     'going'
   end

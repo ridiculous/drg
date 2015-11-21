@@ -20,12 +20,13 @@ class Report
 
   # @note ported from the source that's reading this :D
   def map_args(sexp, list = [])
-    return list.drop(1) unless val = sexp.shift
+    val = sexp.first
+    return list unless val
     case val
       when Symbol
-        map_args(sexp, list << val)
+        map_args(sexp.drop(1), list << val)
       when Sexp
-        map_args(sexp, list << val[1])
+        map_args(sexp.drop(1), list << val[1])
       else
         nil
     end

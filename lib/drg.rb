@@ -21,6 +21,7 @@ module DRG
 
   autoload :Ruby, 'drg/ruby'
   autoload :Decorators, 'drg/decorators'
+  autoload :Spec, 'drg/spec'
 end
 
 load 'tasks/drg.rake'

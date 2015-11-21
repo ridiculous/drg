@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DRG::Ruby::ClassFunc do
-  let(:sexp) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).klass.funcs.find(&:class?).sexp }
+  let(:sexp) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).const.funcs.find(&:class?).sexp }
   let(:_private) { false }
 
   subject { described_class.new(sexp, _private) }

@@ -1,3 +1,5 @@
+require_relative 'application_controller'
+
 class ReservationsController < ApplicationController
   before_filter :config_nav
 

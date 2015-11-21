@@ -3,7 +3,7 @@ class DRG::Decorators::SexpDecorator < DelegateClass(Sexp)
     return enum_for(__method__) unless block_given?
     each_sexp do |exp|
       next unless exp.is_a?(Sexp)
-      if exp.first == :if or exp.flatten.include?(:if)
+      if exp.first == :if or exp.enum_for(:deep_each).any? { |s| s.first == :if }
         yield exp
       end
     end

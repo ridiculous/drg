@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DRG::Ruby::InstanceFunc do
-  let(:klass) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).klass }
+  let(:klass) { DRG::Ruby.new(FIXTURE_ROOT.join('report.rb')).const }
   let(:sexp) { klass.funcs.reject(&:class?).last.sexp }
   let(:_private) { false }
 

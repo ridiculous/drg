@@ -8,6 +8,7 @@ require 'byebug'
 
 RSpec.configure do |config|
   config.raise_errors_for_deprecations!
+  # config.filter_run focus: true
 end
 
 FIXTURE_ROOT = Pathname.new(File.join File.expand_path('..', __FILE__), 'fixtures')

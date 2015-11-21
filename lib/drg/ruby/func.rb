@@ -9,12 +9,13 @@ class DRG::Ruby::Func < Struct.new(:sexp, :_private)
 
   # @note we drop(1) to get rid of :args (which should be the first item in the sexp)
   def map_args(_sexp = sexp, list = [])
-    return list.drop(1) unless val = _sexp.shift
+    val = _sexp.first
+    return list.drop(1) unless val
     case val
     when Symbol
-      map_args(_sexp, list << val)
+      map_args(_sexp.drop(1), list << val)
     when Sexp
-      map_args(_sexp, list << val[1])
+      map_args(_sexp.drop(1), list << val[1])
     else
       nil
     end
