@@ -1,13 +1,13 @@
 require 'ruby_parser'
 
 class DRG::Ruby::Const
-  CONSTANT_DEFS = { :class => :class, :module => :module, :cdecl => :class }
+  CONSTANT_DEFS = { class: :class, module: :module, cdecl: :class }
 
   attr_reader :sexp
 
   # @param [Sexp] sexp
   def initialize(sexp)
-    sexp = sexp.select { |x| x.is_a?(Array) }.last if sexp[0] == :block
+    sexp = sexp[2] if sexp[0] == :block
     @sexp = sexp
   end
 

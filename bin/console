@@ -2,36 +2,9 @@
 
 require 'bundler/setup'
 require 'pp'
-
-# require 'ruby2ruby'
-# require 'ruby_parser'
-
 require 'rspec'
+require 'irb'
 require 'object_tracker'
 require_relative '../spec/spec_helper'
-
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
-
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require 'pry'
-# Pry.start
-require 'irb'
-
-def sexp
-  ruby      = File.readlines(FIXTURE_ROOT.join 'report.rb').join
-  parser    = RubyParser.new
-  ruby2ruby = Ruby2Ruby.new
-  parser.process(ruby)
-  # ruby2ruby.process(sexp)
-end
-
-def sexp_spec
-  ruby      = File.readlines(FIXTURE_ROOT.join 'report_spec.rb').join
-  parser    = RubyParser.new
-  ruby2ruby = Ruby2Ruby.new
-  parser.process(ruby)
-  # ruby2ruby.process(sexp)
-end
 
 IRB.start

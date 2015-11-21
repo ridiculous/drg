@@ -120,28 +120,6 @@ RUBY
     end
   end
 
-  # describe 'collect_contexts' do
-  #   context 'when there is only one condition' do
-  #     let(:condition) { subject.func_by_name(:enqueue).conditions.first }
-  #
-  #     it 'returns a single element array containing the context' do
-  #       expect(subject.collect_contexts(condition)).to eq ["context \"unless verification_code\" do", "  before {}",
-  #                                                          "  it \"return\" do", "  end", "end"]
-  #     end
-  #   end
-  #
-  #   context 'when there is a nested condition' do
-  #     let(:condition) { subject.func_by_name(:call).conditions[2] }
-  #
-  #     it 'returns a list of all the conditions with the correct nesting' do
-  #       expect(subject.collect_contexts(condition)).to eq ["context \"if report.save then\" do", "  before {}",
-  #                                                          "  context \"if user.wants_mail?\" do", "    before {}",
-  #                                                          "    it \"UserMailer.spam(user).deliver_now\" do", "    end",
-  #                                                          "  end", "end"]
-  #     end
-  #   end
-  # end
-
   describe '#initialization_args' do
     it 'returns a list of args to initialize the class' do
       expect(subject.initialization_args).to eq [:message]

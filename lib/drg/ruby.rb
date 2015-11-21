@@ -11,7 +11,7 @@ module DRG
 
     attr_reader :sexp, :const
 
-    # @param [Pathname] file
+    # @param [Pathname, String] file
     def initialize(file)
       @sexp = RubyParser.new.parse File.read(file)
       @const = DRG::Ruby::Const.new(sexp)
