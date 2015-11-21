@@ -1,5 +1,9 @@
 module DRG
   class FileContext
+    # = Class
+    # First attempt at reading ruby files. It was a pipe dream. See DRG::Ruby for the real stuff ;)
+    #
+
     attr_writer :lines
 
     def initialize

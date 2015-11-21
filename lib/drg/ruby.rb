@@ -1,50 +1,32 @@
 require 'ruby_parser'
+require 'delegate'
 
 module DRG
   class Ruby
-    attr_reader :parser
+    # oh snap!!!
+    DuckPuncher.punch! :Array
 
-    def initialize(file)
-      @parser = RubyParser.new.parse File.read(file)
+    autoload :Const, 'drg/ruby/const'
+    autoload :Condition, 'drg/ruby/condition'
+    autoload :Func, 'drg/ruby/func'
+    autoload :ClassFunc, 'drg/ruby/class_func'
+    autoload :InstanceFunc, 'drg/ruby/instance_func'
+    autoload :Klass, 'drg/ruby/klass'
+
+    attr_reader :sexp
+
+    # @todo remove default (testing only)
+    def initialize(file = FIXTURE_ROOT.join('report.rb'))
+      @sexp = RubyParser.new.parse File.read(file)
     end
 
+    def klass
+      # @todo handle modules and whatnot
+      @klass ||= Klass.new sexp
+    end
+
+    # @todo get modules included or extended by the subject
     def modules
-    end
-
-    class Klass < Struct.new(:sexp)
-
-      def includes
-      end
-
-      def extends
-      end
-
-      def funcs
-        sexp.find_nodes(:defn) + sexp.find_nodes(:defs)
-      end
-
-      def instance_vars
-      end
-
-      def class_vars
-      end
-    end
-
-    class Func
-      def name
-      end
-
-      def args
-      end
-
-      def private?
-      end
-
-      def conditions
-      end
-    end
-
-    class Condition
     end
   end
 end

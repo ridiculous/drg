@@ -4,8 +4,8 @@ class Report
     process(verification_code_id: verification_code.id)
   end
 
-  def self.process(message)
-    new(message).call
+  def self.process(message, opts = {}, duder = nil, whoa = { ok: 'yeah?' })
+    new(message).call(opts)
   end
 
   def self.replace(message, *args, &block)
@@ -18,9 +18,26 @@ class Report
     @message = message
   end
 
+  # @note ported from the source that's reading this :D
+  def map_args(sexp, list = [])
+    return list.drop(1) unless val = sexp.shift
+    case val
+      when Symbol
+        map_args(sexp, list << val)
+      when Sexp
+        map_args(sexp, list << val[1])
+      else
+        nil
+    end
+  end
+
   def call
-    return unless message[:verification_code_id]
+    return [] unless message[:verification_code_id]
+    duder = 1 == 2 ? 0 : -1
     if report.save
+      if user.wants_mail?
+        UserMailer.spam(user).deliver_now
+      end
       report.perform
     else
       report.failure

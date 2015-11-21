@@ -19,9 +19,7 @@ module DRG
     autoload :Log, 'drg/tasks/log'
   end
 
-  class Ruby
-    autoload :Const, 'drg/ruby/const'
-  end
+  autoload :Ruby, 'drg/ruby'
 end
 
 load 'tasks/drg.rake'

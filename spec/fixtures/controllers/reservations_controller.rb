@@ -10,6 +10,8 @@ class ReservationsController < ApplicationController
     if @reservation.save
       ReservationMailer.reservation(@reservation).deliver_later
       redirect_to charter_path, notice: "Thank you for contacting us. We'll get back to you at our earliest convenience."
+    elsif params[:duder].nil? && "whodat" != params[:name]
+      # some other crud
     else
       request.flash[:errors] = @reservation.errors.full_messages
       render :new
