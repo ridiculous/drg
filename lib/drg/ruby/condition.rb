@@ -7,13 +7,7 @@ class DRG::Ruby::Condition
   def initialize(sexp)
     @sexp = sexp
     @statement = Ruby2Ruby.new.process(sexp.deep_clone)
-    @nested_conditions = Set.new
-    sexp.drop(1).flatten.include?(:if) && sexp.drop(1).deep_each do |exp|
-      DRG::Decorators::SexpDecorator.new(exp).each_sexp_condition do |node|
-        @nested_conditions << self.class.new(node)
-      end
-    end
-    @nested_conditions = @nested_conditions.to_a
+    @nested_conditions = create_nested_conditions
   end
 
   def short_statement
@@ -48,5 +42,20 @@ class DRG::Ruby::Condition
 
   def hash
     sexp.object_id
+  end
+
+  #
+  # Private
+  #
+
+  def create_nested_conditions
+    nc = Set.new
+    s = sexp.drop(1)
+    s.flatten.include?(:if) && s.deep_each do |exp|
+      DRG::Decorators::SexpDecorator.new(exp).each_sexp_condition do |node|
+        nc << self.class.new(node)
+      end
+    end
+    nc.to_a
   end
 end
