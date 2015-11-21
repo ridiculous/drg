@@ -77,11 +77,11 @@ describe Ability do
   subject { described_class.new user }
 
   describe "#initialize" do
-    context "when user.luna?" do
+    context "when user.admin?" do
       before {}
     end
 
-    context "unless user.luna?" do
+    context "unless user.admin?" do
       before {}
     end
   end
