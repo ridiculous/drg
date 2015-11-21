@@ -58,13 +58,13 @@ describe Report do
     context "when message[:verification_code_id]" do
       before {}
     end
-    context "duder = (1 == 2)" do
+    context "(1 == 2)" do
       before {}
       it "(0)" do
       end
     end
 
-    context "not duder = (1 == 2)" do
+    context "not (1 == 2)" do
       before {}
     end
     context "when report.save" do

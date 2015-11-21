@@ -7,12 +7,13 @@ class DRG::Ruby::Condition
   def initialize(sexp)
     @sexp = sexp
     @statement = Ruby2Ruby.new.process(sexp.deep_clone)
-    @nested_conditions = []
+    @nested_conditions = Set.new
     sexp.drop(1).flatten.include?(:if) && sexp.drop(1).deep_each do |exp|
       DRG::Decorators::SexpDecorator.new(exp).each_sexp_condition do |node|
         @nested_conditions << self.class.new(node)
       end
     end
+    @nested_conditions = @nested_conditions.to_a
   end
 
   def short_statement
@@ -27,15 +28,25 @@ class DRG::Ruby::Condition
     if @statement =~ /\s+\?\s+(.*?)(:|$)/
       $1.strip
     else
-      Translator.new.perform(@statement[/(.*?)(unless|if)/, 1].to_s.strip)
+      translate @statement[/(.*?)(unless|if)/, 1].to_s.strip
     end
   end
 
-  class Translator
-    def perform(txt)
-      txt.sub! /^return\s*/, 'returns '
-      txt.sub! /^returns\s*$/, 'returns nil'
-      txt.strip
-    end
+  def translate(txt)
+    txt.sub! /^return\s*/, 'returns '
+    txt.sub! /^returns\s*$/, 'returns nil'
+    txt.strip
+  end
+
+  #
+  # Set related stuff
+  #
+
+  def eql?(other)
+    hash == other.hash
+  end
+
+  def hash
+    sexp.object_id
   end
 end

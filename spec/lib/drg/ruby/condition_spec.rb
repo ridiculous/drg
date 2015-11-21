@@ -7,6 +7,32 @@ describe DRG::Ruby::Condition do
 
   subject { described_class.new sexp }
 
+  describe '#initialize' do
+    describe 'nested conditions' do
+      context 'when there are no nested conditions' do
+        it 'returns an empty array' do
+          expect(subject.nested_conditions).to eq []
+        end
+      end
+
+      context 'when there are nested conditions' do
+        let(:sexp) do
+          RubyParser.new.parse '
+          def tab_link_to(*args)
+            link_to(*args, class: "#{\'active\' if args.pop}")
+          end
+          '
+        end
+
+        it 'returns a list of nested conditions' do
+          expect(subject.nested_conditions.length).to eq 1
+          expect(subject.nested_conditions.first.statement).to eq "\"active\" if args.pop"
+          expect(subject.nested_conditions.first.nested_conditions).to eq []
+        end
+      end
+    end
+  end
+
   describe '#statement' do
     it 'parses the sexp condition into chunks' do
       expect(subject.statement).to eq 'return [] unless message[:verification_code_id]'

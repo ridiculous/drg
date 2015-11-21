@@ -7,6 +7,9 @@ require 'highline/import'
 require 'drg/version'
 
 module DRG
+  # defines Object#clone! which provides a deep clone
+  DuckPuncher.punch! :Object
+
   autoload :Tasks, 'drg/tasks'
   autoload :Ruby, 'drg/ruby'
   autoload :Decorators, 'drg/decorators'
