@@ -2,8 +2,13 @@
 [![Code Climate](https://codeclimate.com/github/ridiculous/drg/badges/gpa.svg)](https://codeclimate.com/github/ridiculous/drg)
 [![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg)
 
-A Ruby utility to help automate dependency management using Bundler. You can pin Gem versions to the current or the next
-available level.
+A suite of rake tasks to help you test and manage your project.
+
+The `drg:pin` suite provides enhanced dependency management with Bundler. You can pin Gem versions to the current or the next
+available minor, major or patch level version. 
+
+The `drg:spec` task generates RSpec scaffolding for existing code. This helps bootstrap your tests and guide you in what 
+[I think] you should be testing.
 
 ## Requirements
 
@@ -20,6 +25,7 @@ gem 'drg'
 ## Tasks
 
 ```bash
+rake drg:spec
 rake drg:pin
 rake drg:pin:major
 rake drg:pin:minor
@@ -28,6 +34,58 @@ rake drg:pin:latest
 rake drg:pin:patch_latest
 rake drg:pin:minor_latest
 rake drg:unpin
+```
+
+### drg:spec
+
+Generates RSpec scaffolding for existing code. Pass a file or directory and DRG will generate spec files for each:
+
+```bash
+rake drg:spec[app/controllers]
+rake drg:spec[app/models/user.rb]
+```
+
+This task looks at your code's methods and breaks down their conditions into RSpec `context`s. For example:
+
+Given this file:
+
+```ruby
+# app/models/ability.rb
+class Ability
+  include CanCan::Ability
+
+  def initialize(user)
+    if user.admin?
+      can :manage, :all
+    else
+      can :read, :all
+      can :update, User do |u|
+        u.id == user.id
+      end
+    end
+  end
+end
+```
+
+It will generate this spec:
+```ruby
+require "spec_helper"
+
+describe Ability do
+  let(:user) {}
+
+  subject { described_class.new user }
+
+  describe "#initialize" do
+    context "when user.luna?" do
+      before {}
+    end
+
+    context "unless user.luna?" do
+      before {}
+    end
+  end
+end
 ```
 
 ### drg:pin

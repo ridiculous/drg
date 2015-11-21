@@ -4,6 +4,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
 
   def self.generate(file)
     spec = DRG::Spec.new(file)
+    return if spec.funcs.empty? # nothing to do
     lines = [%Q(require "spec_helper"), %Q(), %Q(describe #{spec.const} do)]
     if spec.class?
       spec.initialization_args.each do |arg|

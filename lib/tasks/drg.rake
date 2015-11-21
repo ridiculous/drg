@@ -46,4 +46,13 @@ namespace :drg do
     task latest_minor: :minor_latest
     task latest_patch: :patch_latest
   end
+
+  task :spec, [:file_name] => :environment do |_, args|
+    DRG::Tasks::SpecRunner.new(args.file_name).perform
+  end
+
+  unless defined?(Rails)
+    task :environment do
+    end
+  end
 end

@@ -13,7 +13,6 @@ module DRG
 
     # @param [Pathname] file
     def initialize(file)
-      file = "#{file}.rb" if file.extname.empty?
       @sexp = RubyParser.new.parse File.read(file)
       @const = DRG::Ruby::Const.new(sexp)
     end

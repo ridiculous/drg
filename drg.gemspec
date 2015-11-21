@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = DRG::VERSION
   spec.authors       = ["Ryan Buckley"]
   spec.email         = ["arebuckley@gmail.com"]
-  spec.summary       = %q{DRG that Gemfile! The missing bundler extension}
-  spec.description   = %q{DRG that Gemfile! The missing bundler extension. Gem version automation with Bundler}
+  spec.summary       = %q{A suite of rake tasks to help you test and manage your project}
+  spec.description   = %q{A suite of rake tasks that provide enhanced dependency management and automatic spec generation}
   spec.homepage      = "https://github.com/ridiculous/drg"
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.executables   = []
