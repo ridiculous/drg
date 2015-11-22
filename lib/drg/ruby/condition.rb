@@ -29,6 +29,11 @@ class DRG::Ruby::Condition
   def translate(txt)
     txt.sub! /^return\s*/, 'returns '
     txt.sub! /^returns\s*$/, 'returns nil'
+    if txt.split(/\s/).length == 1
+      txt = "returns #{txt}"
+    elsif txt.include?(' = ')
+      txt = "assigns #{txt}"
+    end
     txt.strip
   end
 

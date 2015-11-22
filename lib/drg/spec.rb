@@ -80,6 +80,9 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     phrase.sub! /^not if /, 'unless '
     phrase.sub! /^if not /, 'unless '
     phrase.sub! %r"then$", ''
+    if phrase !~ /^(when|unless|not)/
+      phrase = "when #{phrase}"
+    end
     phrase
   end
 end

@@ -58,7 +58,7 @@ describe Report do
     context "when message[:verification_code_id]" do
       before {}
     end
-    context "(1 == 2)" do
+    context "when (1 == 2)" do
       before {}
       it "(0)" do
       end
@@ -71,7 +71,7 @@ describe Report do
       before {}
       context "when user.wants_mail?" do
         before {}
-        it "UserMailer.spam(user).deliver_now" do
+        it "returns UserMailer.spam(user).deliver_now" do
         end
       end
 

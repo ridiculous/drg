@@ -17,7 +17,10 @@ module DRG
         ruby_files.each do |ruby_file|
           file_path = Pathname.new(File.expand_path(ruby_file))
           spec = DRG::Spec.generate(file_path)
-          next unless spec
+          unless spec
+            log "Skipping #{file_path}: no methods found"
+            next
+          end
           rspec_file = Pathname.new(spec_file(ruby_file))
           log "Generating #{rspec_file}"
           FileUtils.mkdir_p(rspec_file.parent)
