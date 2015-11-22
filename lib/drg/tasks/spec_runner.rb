@@ -17,14 +17,21 @@ module DRG
         ruby_files.each do |ruby_file|
           file_path = Pathname.new(File.expand_path(ruby_file))
           spec = DRG::Spec.generate(file_path)
+          spec_file_name = specify(ruby_file)
           unless spec
-            log "Skipping #{file_path}: no methods found"
+            # log "Skipping (nothing to test) ... #{spec_file_name}"
+            log "- #{spec_file_name} - no methods", :gray
             next
           end
           rspec_file = Pathname.new(spec_file(ruby_file))
-          log "Generating #{rspec_file}"
+          if rspec_file.exist?
+            log "- #{spec_file_name} - already exists", :gray
+            next
+          end
+          log "+ #{spec_file_name}"
+          # log "Creating ... #{rspec_file}"
           FileUtils.mkdir_p(rspec_file.parent)
-          File.open(spec_file(ruby_file), 'wb') do |f|
+          File.open(rspec_file, 'wb') do |f|
             f << spec.join("\n")
           end
         end
@@ -44,7 +51,11 @@ module DRG
 
       # @note subbing out /app/ is Rails specific
       def spec_file(ruby_file)
-        File.join(spec_path, "#{ruby_file.sub('.rb', '_spec.rb')}").sub '/app/', '/'
+        File.join(spec_path, "#{specify(ruby_file)}").sub '/app/', '/'
+      end
+
+      def specify(file_name)
+        file_name.sub('.rb', '_spec.rb')
       end
 
       def spec_path

@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'byebug'
 require 'drg'
-require 'byebug'
+require 'sexp_processor'
 
 RSpec.configure do |config|
   config.raise_errors_for_deprecations!

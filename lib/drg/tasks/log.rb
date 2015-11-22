@@ -3,8 +3,8 @@ module DRG
     module Log
       module_function
 
-      def log(msg = nil)
-        say %Q(  * <%= color('#{msg}', :green) %>)
+      def log(msg = nil, color = :green)
+        say %Q(  <%= color('#{msg}', :#{color}) %>)
       end
     end
   end
