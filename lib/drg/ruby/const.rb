@@ -41,7 +41,7 @@ class DRG::Ruby::Const
   end
 
   def funcs
-    @funcs ||= load_funkyness
+    @funcs ||= load_funcs.flatten
   end
 
   def class?
@@ -62,9 +62,9 @@ class DRG::Ruby::Const
 
   private
 
-  def load_funkyness
+  def load_funcs(sexp_list = sexp)
     marked_private = false
-    sexp.map { |node|
+    sexp_list.map { |node|
       next unless node.is_a?(Sexp)
       case node.first
       when :defn
@@ -74,7 +74,15 @@ class DRG::Ruby::Const
       when :call
         marked_private ||= node[2] == :private
         nil
+      when ->(name) { CONSTANT_DEFS.key?(name) }
+        # @note handle stuff like:
+        #   s(:class, :VerificationCode, nil, s(:defs, s(:self), :find, s(:args, :*)))
+        # and
+        #   s(:module, :ConditionParsers, s(:class, :ReturnValue, ...))
+        load_funcs(node.compact[2])
       else
+        # @todo uncomment with logger at debug level
+        # puts "got #{__method__} with #{node.first} and don't know how to handle it"
         nil
       end
     }.compact

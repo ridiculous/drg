@@ -160,6 +160,19 @@ describe DRG::Ruby::Const do
         expect(subject.funcs.find { |f| f.name == :_secret_key_generator }).to be_private
       end
     end
+
+    context 'parsing namespaced const' do
+      let(:file) { FIXTURE_ROOT.join('mixins/helpers/date_helper.rb') }
+
+      # @example of method sexp
+      #   s(:defn, :initialize, s(:args, :date), s(:iasgn, :@date, s(:lvar, :date)))
+      it 'returns the correct list of methods' do
+        expect(subject.funcs.length).to eq 3
+        expect(subject.funcs.reject(&:private?).length).to eq 2
+        expect(subject.funcs.reject(&:private?).first.sexp[1]).to eq :initialize
+        expect(subject.funcs.reject(&:private?).last.sexp[1]).to eq :perform
+      end
+    end
   end
 
   describe '#class?' do
