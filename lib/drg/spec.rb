@@ -2,6 +2,10 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   # = Class
   # generate a rspec file based on existing code
 
+  def self.default_indent_size
+    2
+  end
+
   def self.generate(file)
     spec = DRG::Spec.new(file)
     return if spec.funcs.empty? # nothing to do
@@ -44,7 +48,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   end
 
   def collect_contexts(condition, indent = '', contexts = [])
-    new_indent = indent + '  '
+    new_indent = indent + (' ' *  self.class.default_indent_size)
     contexts << %Q(#{indent}context #{quote(tr(condition.short_statement))} do) << %Q(#{new_indent}before {})
     unless condition.return_value.empty?
       contexts << %Q(#{new_indent}it #{quote(condition.return_value)} do) << %Q(#{new_indent}end)
@@ -61,7 +65,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   def quote(txt)
     txt.strip!
     if txt =~ /"/
-      "%Q(#{txt})"
+      "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '@\1')}]"
     else
       %Q("#{txt}")
     end
@@ -79,7 +83,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     phrase.sub! /^if /, 'when '
     phrase.sub! /^not if /, 'unless '
     phrase.sub! /^if not /, 'unless '
-    phrase.sub! %r"then$", ''
+    phrase.sub! /then$/, ''
     if phrase !~ /^(when|unless|not)/
       phrase = "when #{phrase}"
     end

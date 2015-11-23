@@ -33,7 +33,7 @@ class Report
   end
 
   def call
-    return [] unless message[:verification_code_id]
+    return [] unless message[:verification_code_id] or message["verification_code_id"]
     duder = 1 == 2 ? 0 : -1
     if report.save
       if user.wants_mail?

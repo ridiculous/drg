@@ -49,18 +49,18 @@ describe Report do
   end
 
   describe "#call" do
-    context "unless message[:verification_code_id]" do
+    context %Q[unless (message[:verification_code_id] or message["verification_code_id"])] do
       before {}
       it "returns []" do
       end
     end
 
-    context "when message[:verification_code_id]" do
+    context %Q[when (message[:verification_code_id] or message["verification_code_id"])] do
       before {}
     end
     context "when (1 == 2)" do
       before {}
-      it "(0)" do
+      it "returns (0)" do
       end
     end
 
@@ -92,7 +92,7 @@ describe Report do
   end
 
 end
-RUBY
+      RUBY
     end
   end
 
@@ -170,6 +170,53 @@ RUBY
     context 'when the subject is a class' do
       it 'returns false' do
         expect(subject).to_not be_module
+      end
+    end
+  end
+
+  describe '#quote' do
+    context 'when the string has double quotes' do
+      let(:txt) { 'File.exists?("file.rb")' }
+
+      it 'escapes the double qoutes' do
+        expect(subject.quote(txt)).to eq "%Q[File.exists?(\"file.rb\")]"
+      end
+
+      context 'when the string has interpolation' do
+        let(:txt) { 'File.exists?("#{file}.rb") and name != \'foo\'' }
+
+        it 'replaces the interpolation with an @ sign' do
+          expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\@file.rb\") and name != 'foo']"
+        end
+
+        it 'returns a valid string object' do
+          expect(eval(subject.quote(txt))).to eq "File.exists?(\"@file.rb\") and name != 'foo'"
+        end
+
+        context 'when interpolation is multiline' do
+          let(:txt) { 'File.exists?("#{
+file}.rb")' }
+
+          it 'correctly replaces the interpolation with an @ sign' do
+            expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@\nfile.rb\")]"
+          end
+
+          context 'when more complicated interpolation' do
+            let(:txt) { 'File.exists?("#{file + \'name\'}.rb")' }
+
+            it 'correctly replaces the interpolation with an @ sign' do
+              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@file + 'name'.rb\")]"
+            end
+          end
+
+          context 'with multiple interpolations' do
+            let(:txt) { 'File.exists?("#{file}.rb") and "#{name} #{age}" == "foo 25"' }
+
+            it 'correctly replaces all occurrences interpolation with an @ sign' do
+              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@file.rb\") and \"@name @age\" == \"foo 25\"]"
+            end
+          end
+        end
       end
     end
   end

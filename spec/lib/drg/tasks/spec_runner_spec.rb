@@ -9,11 +9,13 @@ describe DRG::Tasks::SpecRunner do
   end
 
   describe "#perform" do
-    context %Q(when (not File.exists?(file)) and (not File.exists?("#{file}.rb"))) do
+    context %Q[when (not File.exists?(file)) and (not File.exists?("@file.rb"))] do
       before {}
+      it %Q[fail(ArgumentError, "File or directory does not exist: \"@file\"")] do
+      end
     end
 
-    context %Q(unless (not File.exists?(file)) and (not File.exists?("#{file}.rb"))) do
+    context %Q[unless (not File.exists?(file)) and (not File.exists?("@file.rb"))] do
       before {}
     end
     context "unless spec" do
@@ -28,7 +30,7 @@ describe DRG::Tasks::SpecRunner do
   describe "#ruby_files" do
     context "when File.directory?(file)" do
       before {}
-      it %Q((["#{file}.rb"])) do
+      it %Q[(["@file.rb"])] do
       end
     end
 
@@ -44,11 +46,11 @@ describe DRG::Tasks::SpecRunner do
   end
 
   describe "#spec_path" do
-    context %Q(when File.directory?(File.expand_path("spec"))) do
+    context %Q[when File.directory?(File.expand_path("spec"))] do
       before {}
     end
 
-    context %Q(unless File.directory?(File.expand_path("spec"))) do
+    context %Q[unless File.directory?(File.expand_path("spec"))] do
       before {}
     end
   end
