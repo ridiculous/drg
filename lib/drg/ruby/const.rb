@@ -1,7 +1,8 @@
 require 'ruby_parser'
 
 class DRG::Ruby::Const
-  CONSTANT_DEFS = { class: :class, module: :module, cdecl: :class }
+  CLASS_MOD_DEFS = { class: :class, module: :module }
+  CONSTANT_DEFS = { cdecl: :class }.merge CLASS_MOD_DEFS
 
   attr_reader :sexp
 
@@ -11,13 +12,19 @@ class DRG::Ruby::Const
     @sexp = sexp
   end
 
+  # s(:module, :Admin, s(:class, :Super, nil, s(:class, :UsersController, s(:colon3, :ApplicationController), s(:defn, :name, s(:args)
+  # s(:class, :Report, nil, s(:cdecl, :DEFAULT_TZ, s(:str, "UTC")), s(:defs, s(:self), :enqueue,
   def name(sexp = @sexp, list = [])
     sexp = Array(sexp)
     if sexp[1].is_a?(Sexp) && sexp[1][0] == :colon2
       parts = sexp[1].to_a.flatten
       list.concat parts.drop(parts.size / 2)
     elsif CONSTANT_DEFS.key?(sexp[0])
-      name(sexp.compact[2], list << sexp[1].to_s)
+      list << sexp[1].to_s
+      # recurse unless the second element is nil, which indicates it's the end of the class/module definition
+      if !sexp[2].nil? || (sexp[3].is_a?(Sexp) and CLASS_MOD_DEFS.key?(sexp[3].first))
+        name(sexp.compact[2], list)
+      end
     end
     list.join('::')
   end

@@ -1,4 +1,6 @@
 class Report
+  DEFAULT_TZ = 'UTC'
+
   def self.enqueue(verification_code)
     return unless verification_code
     process(verification_code_id: verification_code.id)
