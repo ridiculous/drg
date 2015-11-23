@@ -53,5 +53,29 @@ describe DRG::Ruby::Condition do
         expect(subject.return_value).to eq 'returns nil'
       end
     end
+
+    context 'when reading a longer if statement' do
+      let(:sexp) { RubyParser.new.parse %Q[return [] unless message[:verification_code_id] or message["verification_code_id"]] }
+
+      it 'returns the correct value' do
+        expect(subject.return_value).to eq 'returns []'
+      end
+    end
+
+    context 'returning an array' do
+      let(:sexp) {
+        RubyParser.new.parse '
+if file.extname.empty?
+  ["#{file}.rb"]
+else
+  [file]
+end
+'
+      }
+
+      it 'returns the correct value' do
+        expect(subject.return_value).to eq %Q(returns ([\"\#{file}.rb\"]))
+      end
+    end
   end
 end

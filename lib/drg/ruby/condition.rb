@@ -19,14 +19,20 @@ class DRG::Ruby::Condition
   end
 
   def return_value
+    edit find_return_value
+  end
+
+  def find_return_value
     if @statement =~ /\s+\?\s+(.*?)(:|$)/
       $1.strip
+    elsif @statement[/then\n(.+)\nend/]
+      $1.strip
     else
-      translate @statement[/(.*?)(unless|if)/, 1].to_s.strip
+      @statement[/(.*?)(unless|if)/, 1].to_s.strip
     end
   end
 
-  def translate(txt)
+  def edit(txt)
     txt.sub! /^return\s*/, 'returns '
     txt.sub! /^returns\s*$/, 'returns nil'
     if txt.split(/\s/).length == 1
