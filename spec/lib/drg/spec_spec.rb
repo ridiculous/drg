@@ -91,6 +91,9 @@ describe Report do
   describe "#verification_code" do
   end
 
+  describe ".find" do
+  end
+
 end
       RUBY
     end
@@ -111,8 +114,8 @@ end
   describe '#funcs' do
     it 'returns an array with all the methods defined in the target file' do
       expect(subject.funcs).to be_a Array
-      expect(subject.funcs.length).to eq 10
-      expect(subject.funcs.select(&:class?).length).to eq 3
+      expect(subject.funcs.length).to eq 11
+      expect(subject.funcs.select(&:class?).length).to eq 4
       expect(subject.funcs.reject(&:class?).length).to eq 7
       expect(subject.funcs.select(&:private?).length).to eq 2
       expect(subject.funcs.first.name).to eq :enqueue

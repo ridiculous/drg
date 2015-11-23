@@ -147,7 +147,7 @@ describe DRG::Ruby::Const do
     it 'returns all the methods in the class' do
       expect(subject.funcs.map(&:name)).to eq [
                                                 :enqueue, :process, :replace, :initialize, :map_args, :call, :report,
-                                                :verification_code, :_secret_key_generator, :less_secret_stuff
+                                                :verification_code, :find, :_secret_key_generator, :less_secret_stuff
                                               ]
     end
 
@@ -171,6 +171,20 @@ describe DRG::Ruby::Const do
         expect(subject.funcs.reject(&:private?).length).to eq 2
         expect(subject.funcs.reject(&:private?).first.sexp[1]).to eq :initialize
         expect(subject.funcs.reject(&:private?).last.sexp[1]).to eq :perform
+      end
+    end
+
+    context 'another file' do
+      let(:file) { FIXTURE_ROOT.join('presenters', 'notification_presenter.rb')}
+
+      it 'returns the methods in the file' do
+        expect(subject.funcs).to be_kind_of Array
+        expect(subject.funcs.length).to eq 4
+        expect(subject.funcs.first).to be_kind_of DRG::Ruby::InstanceFunc
+        expect(subject.funcs.first.sexp[1]).to eq :initialize
+        expect(subject.funcs.first.conditions).to be_empty
+        expect(subject.funcs.last.sexp[1]).to eq :new_handler
+        expect(subject.funcs.last.conditions.length).to eq 1
       end
     end
   end

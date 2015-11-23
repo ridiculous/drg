@@ -75,14 +75,17 @@ class DRG::Ruby::Const
         marked_private ||= node[2] == :private
         nil
       when ->(name) { CONSTANT_DEFS.key?(name) }
-        # @note handle stuff like:
+        # @note handle diz kind stuff:
         #   s(:class, :VerificationCode, nil, s(:defs, s(:self), :find, s(:args, :*)))
         # and
         #   s(:module, :ConditionParsers, s(:class, :ReturnValue, ...))
-        load_funcs(node.compact[2])
+        # and
+        #   s(:class, :NotificationPresenter, nil, s(:call, nil, :extend, s(:const, :Forwardable)), s(:call, nil, :attr_reader, ...))
+        load_funcs(node.compact.drop(2))
       else
         # @todo uncomment with logger at debug level
-        # puts "got #{__method__} with #{node.first} and don't know how to handle it"
+        #   puts "got #{__method__} with #{node.first} and don't know how to handle it"
+        # @note :const seems to indicate module inclusion/extension
         nil
       end
     }.compact
