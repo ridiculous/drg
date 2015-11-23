@@ -17,19 +17,17 @@ module DRG
         ruby_files.each do |ruby_file|
           file_path = Pathname.new(File.expand_path(ruby_file))
           spec = DRG::Spec.generate(file_path)
-          spec_file_name = specify(ruby_file)
           unless spec
-            # log "Skipping (nothing to test) ... #{spec_file_name}"
-            log "- #{spec_file_name} - no methods", :gray
+            log "- #{ruby_file} - no methods", :gray
             next
           end
           rspec_file = Pathname.new(spec_file(ruby_file))
+          spec_file_path = rspec_file.to_s[%r|/(spec/.+)|, 1]
           if rspec_file.exist?
-            log "- #{spec_file_name} - already exists", :gray
+            log "- #{spec_file_path} - already exists", :gray
             next
           end
-          log "+ #{spec_file_name}"
-          # log "Creating ... #{rspec_file}"
+          log "+ #{spec_file_path}"
           FileUtils.mkdir_p(rspec_file.parent)
           File.open(rspec_file, 'wb') do |f|
             f << spec.join("\n")
