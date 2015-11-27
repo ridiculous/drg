@@ -36,12 +36,14 @@ class Report
 
   def call
     return [] unless message[:verification_code_id] or message["verification_code_id"]
-    duder = 1 == 2 ? 0 : -1
+    @duder = 1 == 2 ? 0 : -1
     if report.save
       if user.wants_mail?
         UserMailer.spam(user).deliver_now
       end
       report.perform
+    elsif report.save!
+      report.force_perform
     else
       report.failure
     end

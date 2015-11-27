@@ -12,14 +12,13 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     lines = [%Q(require "spec_helper"), %Q(), %Q(describe #{spec.const} do)]
     if spec.class?
       spec.initialization_args.each do |arg|
-        lines << %Q(  let(:#{arg}) {})
+        lines << %Q(  let(:#{arg.to_s.sub(/^[&*]/, '')}) {})
       end
       lines << %Q()
       lines << %Q(  subject { described_class.new #{spec.initialization_args.join(', ')} })
     elsif spec.module?
       lines << %Q(  subject { Class.new { include #{spec.const} }.new })
     end
-
     lines << %Q()
     spec.funcs.reject(&:private?).each do |func|
       lines << %Q(  describe #{spec.quote("#{func.class? ? '.' : '#'}#{func.name}")} do)
@@ -48,7 +47,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   end
 
   def collect_contexts(condition, indent = '', contexts = [])
-    new_indent = indent + (' ' *  self.class.default_indent_size)
+    new_indent = indent + (' ' * self.class.default_indent_size)
     contexts << %Q(#{indent}context #{quote(tr(condition.short_statement))} do) << %Q(#{new_indent}before {})
     unless condition.return_value.empty?
       contexts << %Q(#{new_indent}it #{quote(condition.return_value)} do) << %Q(#{new_indent}end)
@@ -57,15 +56,30 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
       condition.nested_conditions.each { |nc| collect_contexts(nc, new_indent, contexts) }
     end
     contexts << %Q(#{indent}end) << %Q() # /context
-    contexts << %Q(#{indent}context #{quote(tr(negate(condition.short_statement)))} do) << %Q(#{new_indent}before {})
-    contexts << %Q(#{indent}end)
+    if condition.parts.empty?
+      contexts << %Q(#{indent}context #{quote(tr(negate(condition.short_statement)))} do) << %Q(#{new_indent}before {})
+      unless condition.else_return_value.empty?
+        contexts << %Q(#{new_indent}it #{quote(condition.else_return_value)} do) << %Q(#{new_indent}end)
+      end
+      contexts << %Q(#{indent}end)
+    end
+    condition.parts.each do |condition_part|
+      contexts << %Q(#{indent}context #{quote(tr(condition_part.short_statement))} do) << %Q(#{new_indent}before {})
+      contexts << %Q(#{new_indent}it #{quote(condition_part.return_value)} do) << %Q(#{new_indent}end)
+      contexts << %Q(#{indent}end)
+      unless condition_part.else_return_value.empty?
+        contexts << %Q(#{indent}context #{quote(tr(negate(condition_part.short_statement)))} do) << %Q(#{new_indent}before {})
+        contexts << %Q(#{new_indent}it #{quote(condition_part.else_return_value)} do) << %Q(#{new_indent}end)
+        contexts << %Q(#{indent}end)
+      end
+    end
     contexts
   end
 
   def quote(txt)
     txt.strip!
     if txt =~ /"/
-      "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '@\1')}]"
+      "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '\#{\1}')}]"
     else
       %Q("#{txt}")
     end

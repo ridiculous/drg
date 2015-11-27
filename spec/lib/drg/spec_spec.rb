@@ -60,28 +60,39 @@ describe Report do
     end
     context "when (1 == 2)" do
       before {}
-      it "returns (0)" do
+      it "returns 0" do
       end
     end
 
     context "not (1 == 2)" do
       before {}
+      it "returns -1" do
+      end
     end
     context "when report.save" do
       before {}
+      it "returns report.perform" do
+      end
       context "when user.wants_mail?" do
         before {}
         it "returns UserMailer.spam(user).deliver_now" do
         end
       end
 
-      context "unless user.wants_mail?" do
+      context "not user.wants_mail?" do
         before {}
       end
     end
 
-    context "unless report.save" do
+    context "when report.save!" do
       before {}
+      it "returns report.force_perform" do
+      end
+    end
+    context "not report.save!" do
+      before {}
+      it "returns report.failure" do
+      end
     end
   end
 
@@ -96,6 +107,63 @@ describe Report do
 
 end
       RUBY
+    end
+
+
+    context 'given a file with a long if/elsif/else' do
+      let(:file) { FIXTURE_ROOT.join('extensions.rb') }
+
+      it 'returns an array of lines for the file' do
+        expect(described_class.generate(file).join("\n")).to eq <<-RUBY
+require "spec_helper"
+
+describe Extensions do
+  subject { Class.new { include Extensions }.new }
+
+  describe "#load_and_authorize_item!" do
+    context "when coupon.nil?" do
+      before {}
+      it %Q[fail(Error, "Couldn't find the coupon")] do
+      end
+      context "when coupon.expired?" do
+        before {}
+        it %Q[fail(Error, "Coupon has expired")] do
+        end
+      end
+
+      context "when coupon.inactive?" do
+        before {}
+        it %Q[fail(Error, "Coupon is not activated")] do
+        end
+      end
+      context "not coupon.inactive?" do
+        before {}
+        it "assigns @item = coupon" do
+        end
+      end
+      context "when coupon.inactive?" do
+        before {}
+        it %Q[fail(Error, "Coupon is not activated")] do
+        end
+      end
+
+      context "not coupon.inactive?" do
+        before {}
+        it "assigns @item = coupon" do
+        end
+      end
+    end
+
+    context "when coupon.cannot_use?" do
+      before {}
+      it %Q[fail(Error, "Coupon has been used up")] do
+      end
+    end
+  end
+
+end
+        RUBY
+      end
     end
   end
 
@@ -188,35 +256,35 @@ end
       context 'when the string has interpolation' do
         let(:txt) { 'File.exists?("#{file}.rb") and name != \'foo\'' }
 
-        it 'replaces the interpolation with an @ sign' do
-          expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\@file.rb\") and name != 'foo']"
+        it 'escapes interpolation' do
+          expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file}.rb\") and name != 'foo']"
         end
 
         it 'returns a valid string object' do
-          expect(eval(subject.quote(txt))).to eq "File.exists?(\"@file.rb\") and name != 'foo'"
+          expect(eval(subject.quote(txt))).to eq "File.exists?(\"\#{file}.rb\") and name != 'foo'"
         end
 
         context 'when interpolation is multiline' do
           let(:txt) { 'File.exists?("#{
 file}.rb")' }
 
-          it 'correctly replaces the interpolation with an @ sign' do
-            expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@\nfile.rb\")]"
+          it 'correctly escapes the interpolation' do
+            expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{\nfile}.rb\")]"
           end
 
           context 'when more complicated interpolation' do
             let(:txt) { 'File.exists?("#{file + \'name\'}.rb")' }
 
-            it 'correctly replaces the interpolation with an @ sign' do
-              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@file + 'name'.rb\")]"
+            it 'correctly escapes the interpolation' do
+              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file + 'name'}.rb\")]"
             end
           end
 
           context 'with multiple interpolations' do
             let(:txt) { 'File.exists?("#{file}.rb") and "#{name} #{age}" == "foo 25"' }
 
-            it 'correctly replaces all occurrences interpolation with an @ sign' do
-              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"@file.rb\") and \"@name @age\" == \"foo 25\"]"
+            it 'correctly escapes all interpolations' do
+              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file}.rb\") and \"\\\#{name} \\\#{age}\" == \"foo 25\"]"
             end
           end
         end
