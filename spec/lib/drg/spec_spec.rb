@@ -206,6 +206,48 @@ end
         RUBY
       end
     end
+
+    context 'when given a file with a nested condition in a block' do
+      let(:file) { FIXTURE_ROOT.join('controllers/application_controller.rb') }
+
+      it 'rejects multiline statements to protect the client from our shortcomings' do
+        expect(described_class.generate(file).join("\n")).to eq <<-RUBY
+require "spec_helper"
+
+describe ApplicationController do
+
+  subject { described_class.new  }
+
+  describe ".before_filter" do
+  end
+
+  describe "#current_user" do
+    it "assigns @current_user" do
+    end
+    context "when defined? @current_user" do
+      before {}
+      it "returns @current_user" do
+      end
+      context "when cookies[:auth_token]" do
+        before {}
+        it "User.find_by!(:auth_token => cookies[:auth_token])" do
+        end
+      end
+
+      context "not cookies[:auth_token]" do
+        before {}
+      end
+    end
+
+    context "not defined? @current_user" do
+      before {}
+    end
+  end
+
+end
+        RUBY
+      end
+    end
   end
 
   describe '#const' do

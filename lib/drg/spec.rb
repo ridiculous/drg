@@ -52,7 +52,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   def collect_contexts(condition, indent = '', contexts = [])
     new_indent = indent + (' ' * self.class.default_indent_size)
     contexts << %Q(#{indent}context #{quote(tr(condition.short_statement))} do) << %Q(#{new_indent}before {})
-    unless condition.return_value.empty?
+    if should_print? condition.return_value
       contexts << %Q(#{new_indent}it #{quote(condition.return_value)} do) << %Q(#{new_indent}end)
     end
     if condition.nested_conditions.any?
@@ -61,7 +61,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     contexts << %Q(#{indent}end) << %Q() # /context
     if condition.parts.empty?
       contexts << %Q(#{indent}context #{quote(tr(negate(condition.short_statement)))} do) << %Q(#{new_indent}before {})
-      unless condition.else_return_value.empty?
+      if should_print? condition.else_return_value
         contexts << %Q(#{new_indent}it #{quote(condition.else_return_value)} do) << %Q(#{new_indent}end)
       end
       contexts << %Q(#{indent}end)
@@ -70,7 +70,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
       contexts << %Q(#{indent}context #{quote(tr(condition_part.short_statement))} do) << %Q(#{new_indent}before {})
       contexts << %Q(#{new_indent}it #{quote(condition_part.return_value)} do) << %Q(#{new_indent}end)
       contexts << %Q(#{indent}end)
-      unless condition_part.else_return_value.empty?
+      if should_print? condition_part.else_return_value
         contexts << %Q(#{indent}context #{quote(tr(negate(condition_part.short_statement)))} do) << %Q(#{new_indent}before {})
         contexts << %Q(#{new_indent}it #{quote(condition_part.else_return_value)} do) << %Q(#{new_indent}end)
         contexts << %Q(#{indent}end)
@@ -106,5 +106,10 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
       phrase = "when #{phrase}"
     end
     phrase
+  end
+
+  # @description reject multiline statements, which means we messed up somewhere else, so let's hide that
+  def should_print?(txt)
+    !txt.empty? and txt !~ /\n/
   end
 end

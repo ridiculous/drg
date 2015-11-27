@@ -155,8 +155,27 @@ end
         RUBY
       end
 
-      it 'returns the correct parts' do
+      it 'returns an empty string' do
         expect(subject.else_return_value).to eq ''
+      end
+    end
+
+    context 'when given a block for the else statement' do
+      let(:sexp) do
+        RubyParser.new.parse <<-RUBY
+          def current_user
+            @current_user ||= defined?(@current_user) ? @current_user : begin
+              User.find_by!(auth_token: cookies[:auth_token]) if cookies[:auth_token]
+            rescue ActiveRecord::RecordNotFound
+              Rails.logger.warn(%Q(Could not find user w/ token "\#{cookies[:auth_token]}"))
+              nil
+            end
+          end
+        RUBY
+      end
+
+      it 'returns the full statement (broken)' do
+        expect(subject.else_return_value).to eq "@current_user ||= if defined? @current_user then\n  @current_user\nelse\n  begin\n  begin\n    User.find_by!(:auth_token => cookies[:auth_token]) if cookies[:auth_token]\n  rescue ActiveRecord::RecordNotFound\n    Rails.logger.warn(\"Could not find user w/ token \\\"\#{cookies[:auth_token]}\\\"\")\n    nil\n  end\n  end\nend"
       end
     end
   end
