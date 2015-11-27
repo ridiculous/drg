@@ -141,7 +141,7 @@ gem 'rails', '~> 4.2'
 Want to pin gems at their __patch__ version?
 
 ```bash
-rake drg:pin:minor
+rake drg:pin:patch
 ```
 
 This task will update your Gemfile with the approximate gem's patch version. It'll change:
