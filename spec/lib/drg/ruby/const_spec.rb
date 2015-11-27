@@ -146,7 +146,7 @@ describe DRG::Ruby::Const do
 
     it 'returns all the methods in the class' do
       expect(subject.funcs.map(&:name)).to eq [
-                                                :enqueue, :process, :replace, :initialize, :map_args, :call, :report,
+                                                :enqueue, :process, :replace, :initialize, :map_args, :go, :call, :report,
                                                 :verification_code, :find, :_secret_key_generator, :less_secret_stuff
                                               ]
     end

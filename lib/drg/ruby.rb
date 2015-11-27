@@ -8,6 +8,7 @@ module DRG
     autoload :Func, 'drg/ruby/func'
     autoload :ClassFunc, 'drg/ruby/class_func'
     autoload :InstanceFunc, 'drg/ruby/instance_func'
+    autoload :Assignment, 'drg/ruby/assignment'
 
     attr_reader :sexp, :const
 

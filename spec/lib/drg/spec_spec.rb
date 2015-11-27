@@ -34,6 +34,8 @@ describe Report do
   end
 
   describe "#initialize" do
+    it "assigns @message" do
+    end
   end
 
   describe "#map_args" do
@@ -48,7 +50,21 @@ describe Report do
     end
   end
 
+  describe "#go" do
+    context "when (@duder == -1)" do
+      before {}
+      it "assigns @go = :ok" do
+      end
+    end
+
+    context "not (@duder == -1)" do
+      before {}
+    end
+  end
+
   describe "#call" do
+    it "assigns @duder" do
+    end
     context %Q[unless (message[:verification_code_id] or message["verification_code_id"])] do
       before {}
       it "returns []" do
@@ -97,9 +113,13 @@ describe Report do
   end
 
   describe "#report" do
+    it "assigns @report" do
+    end
   end
 
   describe "#verification_code" do
+    it "assigns @verification_code" do
+    end
   end
 
   describe ".find" do
@@ -161,6 +181,27 @@ describe Extensions do
     end
   end
 
+  describe "#call" do
+    it "assigns @called" do
+    end
+  end
+
+  describe "#go" do
+    it "assigns @go" do
+    end
+  end
+
+  describe "#index" do
+    it "assigns @title" do
+    end
+    it "assigns @finder" do
+    end
+    it "assigns @infections" do
+    end
+    it "assigns @notification" do
+    end
+  end
+
 end
         RUBY
       end
@@ -182,9 +223,9 @@ end
   describe '#funcs' do
     it 'returns an array with all the methods defined in the target file' do
       expect(subject.funcs).to be_a Array
-      expect(subject.funcs.length).to eq 11
+      expect(subject.funcs.length).to eq 12
       expect(subject.funcs.select(&:class?).length).to eq 4
-      expect(subject.funcs.reject(&:class?).length).to eq 7
+      expect(subject.funcs.reject(&:class?).length).to eq 8
       expect(subject.funcs.select(&:private?).length).to eq 2
       expect(subject.funcs.first.name).to eq :enqueue
       expect(subject.funcs.first.conditions.map(&:statement)).to eq ["return unless verification_code"]

@@ -34,6 +34,12 @@ class Report
     end
   end
 
+  def go
+    if @duder == -1
+      @go = :ok
+    end
+  end
+
   def call
     return [] unless message[:verification_code_id] or message["verification_code_id"]
     @duder = 1 == 2 ? 0 : -1

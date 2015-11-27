@@ -7,7 +7,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   end
 
   def self.generate(file)
-    spec = DRG::Spec.new(file)
+    spec = new(file)
     return if spec.funcs.empty? # nothing to do
     lines = [%Q(require "spec_helper"), %Q(), %Q(describe #{spec.const} do)]
     if spec.class?
@@ -22,6 +22,9 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     lines << %Q()
     spec.funcs.reject(&:private?).each do |func|
       lines << %Q(  describe #{spec.quote("#{func.class? ? '.' : '#'}#{func.name}")} do)
+      func.assignments.each do |assignment|
+        lines << %Q(    it #{spec.quote(assignment)} do) << %Q(    end)
+      end
       func.conditions.each do |condition|
         lines.concat spec.collect_contexts(condition, '    ')
       end
@@ -77,6 +80,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   end
 
   def quote(txt)
+    txt = txt.to_s
     txt.strip!
     if txt =~ /"/
       "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '\#{\1}')}]"
