@@ -1,5 +1,4 @@
 # DRG
-[![Code Climate](https://codeclimate.com/github/ridiculous/drg/badges/gpa.svg)](https://codeclimate.com/github/ridiculous/drg)
 [![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg)
 
 A suite of rake tasks to help you test and manage your project.
@@ -8,15 +7,13 @@ The `drg:pin` suite provides enhanced dependency management with Bundler. You ca
 available minor, major or patch level version. 
 
 The `drg:spec` task generates RSpec scaffolding for existing code. This helps bootstrap your tests and guide you in what 
-[I think] you should be testing.
+you should be testing.
 
 ## Requirements
 
 * Bundler 1.10+
 
 ## Installation
-
-Add this line to your application's Gemfile:
 
 ```ruby
 gem 'drg'
