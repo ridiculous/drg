@@ -175,7 +175,7 @@ end
       end
 
       it 'returns the full statement (broken)' do
-        expect(subject.else_return_value).to eq "@current_user ||= if defined? @current_user then\n  @current_user\nelse\n  begin\n  begin\n    User.find_by!(:auth_token => cookies[:auth_token]) if cookies[:auth_token]\n  rescue ActiveRecord::RecordNotFound\n    Rails.logger.warn(\"Could not find user w/ token \\\"\#{cookies[:auth_token]}\\\"\")\n    nil\n  end\n  end\nend"
+        expect(subject.else_return_value).to eq "returns @current_user ||= if defined? @current_user then\n  @current_user\nelse\n  begin\n  begin\n    User.find_by!(:auth_token => cookies[:auth_token]) if cookies[:auth_token]\n  rescue ActiveRecord::RecordNotFound\n    Rails.logger.warn(\"Could not find user w/ token \\\"\#{cookies[:auth_token]}\\\"\")\n    nil\n  end\n  end\nend"
       end
     end
   end

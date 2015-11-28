@@ -63,12 +63,12 @@ class DRG::Ruby::Condition
 
   def edit(txt)
     txt = txt.to_s
-    txt.sub! /^return\s*/, 'returns '
+    txt.sub! /^return\b/, 'returns'
     txt.sub! /^returns\s*$/, 'returns nil'
-    if txt.split(/\s/).length == 1
-      txt = "returns #{txt}"
-    elsif txt.include?(' = ')
+    if txt.include?(' = ')
       txt = "assigns #{txt}"
+    elsif !txt.empty? and txt !~ /^return/
+      txt = "returns #{txt.strip}"
     end
     txt.strip
   end

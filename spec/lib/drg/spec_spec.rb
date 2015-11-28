@@ -143,17 +143,17 @@ describe Extensions do
   describe "#load_and_authorize_item!" do
     context "when coupon.nil?" do
       before {}
-      it %Q[fail(Error, "Couldn't find the coupon")] do
+      it %Q[returns fail(Error, "Couldn't find the coupon")] do
       end
       context "when coupon.expired?" do
         before {}
-        it %Q[fail(Error, "Coupon has expired")] do
+        it %Q[returns fail(Error, "Coupon has expired")] do
         end
       end
 
       context "when coupon.inactive?" do
         before {}
-        it %Q[fail(Error, "Coupon is not activated")] do
+        it %Q[returns fail(Error, "Coupon is not activated")] do
         end
       end
       context "not coupon.inactive?" do
@@ -163,7 +163,7 @@ describe Extensions do
       end
       context "when coupon.inactive?" do
         before {}
-        it %Q[fail(Error, "Coupon is not activated")] do
+        it %Q[returns fail(Error, "Coupon is not activated")] do
         end
       end
 
@@ -176,7 +176,7 @@ describe Extensions do
 
     context "when coupon.cannot_use?" do
       before {}
-      it %Q[fail(Error, "Coupon has been used up")] do
+      it %Q[returns fail(Error, "Coupon has been used up")] do
       end
     end
   end
@@ -230,7 +230,7 @@ describe ApplicationController do
       end
       context "when cookies[:auth_token]" do
         before {}
-        it "User.find_by!(:auth_token => cookies[:auth_token])" do
+        it "returns User.find_by!(:auth_token => cookies[:auth_token])" do
         end
       end
 
