@@ -51,8 +51,7 @@ namespace :drg do
     DRG::Tasks::SpecRunner.new(args.file_name).perform
   end
 
-  unless defined?(Rails)
-    task :environment do
-    end
-  end
+  task :environment do
+    # no-op hook task
+  end unless Rake::Task.task_defined?(:environment)
 end
