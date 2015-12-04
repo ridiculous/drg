@@ -3,6 +3,7 @@ require 'ruby_parser'
 class DRG::Ruby::Const
   CLASS_MOD_DEFS = { class: :class, module: :module }
   CONSTANT_DEFS = { cdecl: :class }.merge CLASS_MOD_DEFS
+  PRIVATE_DEFS = [:private, :protected]
 
   attr_reader :sexp
 
@@ -79,7 +80,7 @@ class DRG::Ruby::Const
       when :defs
         DRG::Ruby::ClassFunc.new(node, marked_private)
       when :call
-        marked_private ||= node[2] == :private
+        marked_private ||= PRIVATE_DEFS.include?(node[2])
         nil
       when ->(name) { CONSTANT_DEFS.key?(name) }
         # @note handle diz kind stuff:

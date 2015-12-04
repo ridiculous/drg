@@ -374,6 +374,19 @@ file}.rb")' }
           end
         end
       end
+
+      context 'when the string has backticks and interpolation' do
+        let(:txt) { '`mv #{file_name} #{file_destination}`' }
+
+        it 'correctly escapes all interpolations' do
+          expect(subject.quote(txt)).to eq "%Q[`mv \\\#{file_name} \\\#{file_destination}`]"
+        end
+
+        it 'returns a valid string object' do
+          expect(eval(subject.quote(txt))).to eq "`mv \#{file_name} \#{file_destination}`"
+        end
+      end
+
     end
   end
 

@@ -79,7 +79,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   def quote(txt)
     txt = txt.to_s
     txt.strip!
-    if txt =~ /"/
+    if txt =~ /"|`/
       "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '\#{\1}')}]"
     else
       %Q("#{txt}")

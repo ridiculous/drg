@@ -10,4 +10,10 @@ class ApplicationController
       nil
     end
   end
+
+  protected
+
+  def authenticate!
+    @authenticated = true
+  end
 end

@@ -53,5 +53,5 @@ namespace :drg do
 
   task :environment do
     # no-op hook task
-  end unless Rake::Task.task_defined?(:environment)
+  end if !Rake::Task.task_defined?(:environment) and !defined?(Rails)
 end

@@ -17,7 +17,7 @@ module DRG
         ruby_files.each do |ruby_file|
           rspec_file = Pathname.new(spec_file(ruby_file))
           spec_file_path = rspec_file.to_s[%r|/(spec/.+)|, 1]
-          next if rspec_file.exist?.tap { |result| log "- #{spec_file_path} - already exists", :gray if result }
+          next if rspec_file.exist?.tap { |exists| log "- #{spec_file_path} - already exists", :gray if exists }
           spec = generate_spec(ruby_file)
           next unless spec
           log "+ #{spec_file_path}"
@@ -36,6 +36,8 @@ module DRG
           log "- #{ruby_file} - no methods", :gray
           nil
         end
+      rescue => e
+        log "! #{ruby_file} - #{e.inspect.gsub /^#<|>$/, ''}", :red
       end
 
       def ruby_files
