@@ -1,3 +1,5 @@
+require_relative '../application_controller'
+
 module Admin
   class Super
     class UsersController < ::ApplicationController

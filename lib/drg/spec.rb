@@ -43,10 +43,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   end
 
   def const
-    @const ||= begin
-      require file
-      Kernel.const_get(ruby.const.name)
-    end
+    @const ||= Kernel.const_get(ruby.const.name)
   end
 
   def collect_contexts(condition, indent = '', contexts = [])
