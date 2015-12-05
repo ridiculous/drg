@@ -31,10 +31,10 @@ describe DRG::Ruby::Condition do
     end
   end
 
-  describe '#return_value' do
+  describe '#if_return_value' do
     context 'when a single line expression with unless modifier' do
       it 'returns the correct return value' do
-        expect(subject.return_value).to eq 'returns []'
+        expect(subject.if_return_value).to eq 'returns []'
       end
     end
 
@@ -42,7 +42,7 @@ describe DRG::Ruby::Condition do
       let(:sexp) { RubyParser.new.parse "return unless message" }
 
       it 'says it returns nil' do
-        expect(subject.return_value).to eq 'returns nil'
+        expect(subject.if_return_value).to eq 'returns nil'
       end
     end
 
@@ -50,7 +50,7 @@ describe DRG::Ruby::Condition do
       let(:sexp) { RubyParser.new.parse %Q[return [] unless message[:verification_code_id] or message["verification_code_id"]] }
 
       it 'returns the correct value' do
-        expect(subject.return_value).to eq 'returns []'
+        expect(subject.if_return_value).to eq 'returns []'
       end
     end
 
@@ -66,7 +66,7 @@ end
       end
 
       it 'returns the correct value' do
-        expect(subject.return_value).to eq %Q(returns [\"\#{file}.rb\"])
+        expect(subject.if_return_value).to eq %Q(returns [\"\#{file}.rb\"])
       end
     end
 
@@ -76,7 +76,7 @@ end
       }
 
       it 'returns the correct return value' do
-        expect(subject.return_value).to eq "returns report.perform"
+        expect(subject.if_return_value).to eq "returns report.perform"
       end
     end
 
@@ -98,7 +98,7 @@ end
       end
 
       it 'returns the last line of the begin' do
-        expect(subject.return_value).to eq 'returns user.cards!'
+        expect(subject.if_return_value).to eq 'returns user.cards!'
       end
     end
 
@@ -116,7 +116,7 @@ end
       end
 
       it 'returns an empty string' do
-        expect(subject.return_value).to eq ''
+        expect(subject.if_return_value).to eq ''
       end
     end
   end
@@ -235,7 +235,7 @@ end
       it 'returns the parts of the condition' do
         expect(subject.parts.length).to eq 2
         expect(subject.parts.map(&:short_statement)).to eq ['(dude == "1")', '(you == "bar")']
-        expect(subject.parts.map(&:return_value)).to eq ['returns call_foo(dude)', 'returns call_bar(you)']
+        expect(subject.parts.map(&:if_return_value)).to eq ['returns call_foo(dude)', 'returns call_bar(you)']
         expect(subject.parts.map(&:else_return_value)).to eq ['returns call_foo(you)', 'returns "wut"']
       end
     end

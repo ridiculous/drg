@@ -13,7 +13,7 @@ describe DRG::Ruby::Func do
         expect(subject.conditions.length).to eq 3
         expect(subject.conditions.first).to be_a(DRG::Ruby::Condition)
         expect(subject.conditions[1].short_statement).to eq '(1 == 2)'
-        expect(subject.conditions[1].return_value).to eq 'returns 0'
+        expect(subject.conditions[1].if_return_value).to eq 'returns 0'
       end
     end
 

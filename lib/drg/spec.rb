@@ -49,8 +49,8 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
   def collect_contexts(condition, indent = '', contexts = [])
     new_indent = indent + (' ' * self.class.default_indent_size)
     contexts << %Q(#{indent}context #{escape(edit_prefix(condition.short_statement))} do) << %Q(#{new_indent}before {})
-    if should_print? condition.return_value
-      contexts << %Q(#{new_indent}it #{escape(condition.return_value)} do) << %Q(#{new_indent}end)
+    if should_print? condition.if_return_value
+      contexts << %Q(#{new_indent}it #{escape(condition.if_return_value)} do) << %Q(#{new_indent}end)
     end
     if condition.nested_conditions.any?
       condition.nested_conditions.each { |nc| collect_contexts(nc, new_indent, contexts) }
@@ -65,8 +65,8 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     end
     condition.parts.each do |condition_part|
       contexts << %Q(#{indent}context #{escape(edit_prefix(condition_part.short_statement))} do) << %Q(#{new_indent}before {})
-      if should_print? condition_part.return_value
-        contexts << %Q(#{new_indent}it #{escape(condition_part.return_value)} do) << %Q(#{new_indent}end)
+      if should_print? condition_part.if_return_value
+        contexts << %Q(#{new_indent}it #{escape(condition_part.if_return_value)} do) << %Q(#{new_indent}end)
       end
       contexts << %Q(#{indent}end)
       if should_print? condition_part.else_return_value

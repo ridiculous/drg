@@ -23,19 +23,24 @@ class DRG::Ruby::Condition
     @parts = load_parts
   end
 
+  # @note When the 2nd index is nil this will be an unless statement
   def short_statement
     "#{'unless ' if sexp[2].nil?}#{Ruby2Ruby.new.process(sexp[1].clone!)}"
   end
 
-  def return_value
-    edit Ruby2Ruby.new.process(if_return_value.clone!)
+  def if_return_value
+    edit Ruby2Ruby.new.process(find_if_return_value.clone!)
   end
 
   def else_return_value
     edit Ruby2Ruby.new.process(find_else_return_val.clone!)
   end
 
-  def if_return_value
+  #
+  # Private
+  #
+
+  def find_if_return_value
     if sexp[2].nil?
       sexp.last
     elsif sexp[2].first == :if
@@ -72,10 +77,6 @@ class DRG::Ruby::Condition
     end
     txt.strip
   end
-
-  #
-  # Private
-  #
 
   # @description handles elsif
   def load_parts
