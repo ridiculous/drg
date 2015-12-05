@@ -4,7 +4,42 @@ describe DRG::Ruby::ConditionExhibit do
   let(:sexp) { RubyParser.new.parse "return [] unless message[:verification_code_id]" }
   let(:condition) { DRG::Ruby::Condition.new sexp }
 
-  subject { described_class.new condition }
+  subject { described_class.new condition, ' ' * 10 }
+
+  describe '#render' do
+    context 'when the condition uses an enumerator with a block' do
+      let(:file) { FIXTURE_ROOT.join('original_sexp_decorator.rb') }
+      let(:parser) { RubyParser.new.parse File.read(file) }
+      let(:const) { DRG::Ruby::Const.new(parser) }
+      let(:condition) { const.funcs.first.conditions.last }
+
+      it 'returns the first part of the enumerator' do
+        expect(subject.render.join("\n")).to eq <<-RUBY.chomp
+          context "when (exp.first == :if)" do
+            before {}
+
+            it "returns (yielded << exp)" do
+            end
+
+            context "when yielded.find do |x|" do
+              before {}
+
+              it "returns (yielded << sexp)" do
+              end
+            end
+
+            context "not yielded.find do |x|" do
+              before {}
+            end
+          end
+
+          context "not (exp.first == :if)" do
+            before {}
+          end
+        RUBY
+      end
+    end
+  end
 
   describe '#escape' do
     context 'when the string has double quotes' do

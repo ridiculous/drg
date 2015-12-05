@@ -6,22 +6,22 @@ class DRG::Ruby::Condition
 
   def initialize(sexp)
     @sexp = sexp
-    @statement = Ruby2Ruby.new.process(sexp.deep_clone)
+    @statement = Ruby2Ruby.new.process(sexp.clone!)
     @nested_conditions = create_nested_conditions
     @parts = load_parts
   end
 
   # @note When the 2nd index is nil this will be an unless statement
   def short_statement
-    "#{'unless ' if sexp[2].nil?}#{Ruby2Ruby.new.process(sexp[1].clone!)}"
+    edit_statement Ruby2Ruby.new.process(sexp[1].clone!)
   end
 
   def if_return_value
-    edit Ruby2Ruby.new.process(find_if_return_value.clone!)
+    edit_return_val Ruby2Ruby.new.process(find_if_return_value.clone!)
   end
 
   def else_return_value
-    edit Ruby2Ruby.new.process(find_else_return_val.clone!)
+    edit_return_val Ruby2Ruby.new.process(find_else_return_val.clone!)
   end
 
   #
@@ -54,7 +54,7 @@ class DRG::Ruby::Condition
     end
   end
 
-  def edit(txt)
+  def edit_return_val(txt)
     txt = txt.to_s
     txt.sub! /^return\b/, 'returns'
     txt.sub! /^returns\s*$/, 'returns nil'
@@ -64,6 +64,12 @@ class DRG::Ruby::Condition
       txt = "returns #{txt.strip}"
     end
     txt.strip
+  end
+
+  def edit_statement(txt)
+    txt = txt[/(.+)\n?/, 1] # take first line
+    txt.prepend 'unless ' if sexp[2].nil? # this is an unless statement
+    txt
   end
 
   # @description handles elsif
