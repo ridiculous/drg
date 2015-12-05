@@ -145,6 +145,14 @@ describe DRG::Ruby::Const do
     it 'returns the args to initialize' do
       expect(subject.initialization_args).to eq [:message]
     end
+
+    context 'when initialize just takes a star' do
+      let(:parser) { RubyParser.new.parse('class Foo; def initialize(*) end; end') }
+
+      it 'returns an empty array' do
+        expect(subject.initialization_args).to eq []
+      end
+    end
   end
 
   describe '#func_by_name' do

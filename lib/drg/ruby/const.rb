@@ -47,7 +47,7 @@ class DRG::Ruby::Const
   end
 
   def initialization_args
-    funcs.find(-> { OpenStruct.new }) { |func| func.name == :initialize }.args.to_a
+    funcs.find(-> { OpenStruct.new }) { |func| func.name == :initialize }.args.to_a.reject { |a| a.to_s.sub(/^\*/, '').empty? }
   end
 
   def func_by_name(name_as_symbol)
