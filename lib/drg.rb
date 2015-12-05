@@ -12,7 +12,6 @@ module DRG
 
   autoload :Tasks, 'drg/tasks'
   autoload :Ruby, 'drg/ruby'
-  autoload :Decorators, 'drg/decorators'
   autoload :Spec, 'drg/spec'
 end
 

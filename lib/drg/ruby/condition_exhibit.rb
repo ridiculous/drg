@@ -1,4 +1,4 @@
-class DRG::Decorators::ConditionDecorator < DelegateClass(DRG::Ruby::Condition)
+class DRG::Ruby::ConditionExhibit < DelegateClass(DRG::Ruby::Condition)
   attr_reader :second_indent, :indent
 
   def initialize(condition, indent = '    ')
@@ -6,11 +6,13 @@ class DRG::Decorators::ConditionDecorator < DelegateClass(DRG::Ruby::Condition)
     @indent, @second_indent = indent, indent + (' ' * DRG::Spec.default_indent_size)
   end
 
-  def collect_contexts(contexts = [])
+  # @param [Array] contexts just used for recursive calls
+  # @return [Array]
+  def render(contexts = [])
     contexts.concat(context(:short_statement, [:edit_prefix, :escape]) do |lines|
       lines.concat it(:if_return_value, :escape)
       lines << %Q() if nested_conditions.any?
-      nested_conditions.each { |nc| self.class.new(nc, second_indent).collect_contexts(lines) }
+      nested_conditions.each { |nc| self.class.new(nc, second_indent).render(lines) }
       lines
     end)
     contexts << %Q()
@@ -59,7 +61,6 @@ class DRG::Decorators::ConditionDecorator < DelegateClass(DRG::Ruby::Condition)
   end
 
   def escape(txt)
-    txt = txt.to_s
     txt.gsub!(/#\{(.*?)\}/m, '\#{\1}') # escape interpolations
     txt.gsub!(/"/m, '\"') # escape double quotes
     txt.gsub!(/\\\\/m, '\\') # replace multiple escapes with a single escape

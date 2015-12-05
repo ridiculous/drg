@@ -1,4 +1,4 @@
-class DRG::Decorators::SexpDecorator < DelegateClass(Sexp)
+class DRG::Ruby::SexpDecorator < DelegateClass(Sexp)
   def each_sexp_condition
     return enum_for(__method__) unless block_given?
     yielded = []

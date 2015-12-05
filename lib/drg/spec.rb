@@ -39,7 +39,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
       end
       lines << %Q() if func.conditions.any? and func.assignments.any?
       func.conditions.each do |condition|
-        lines.concat DRG::Decorators::ConditionDecorator.new(condition, second_indent).collect_contexts
+        lines.concat DRG::Ruby::ConditionExhibit.new(condition, second_indent).render
       end
       lines << %Q(#{indent}end) << %Q()
     end

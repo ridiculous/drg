@@ -2,7 +2,7 @@ class DRG::Ruby::Func < Struct.new(:sexp, :_private)
   alias private? _private
 
   def conditions
-    @conditions ||= DRG::Decorators::SexpDecorator.new(sexp).each_sexp_condition.map &DRG::Ruby::Condition.method(:new)
+    @conditions ||= DRG::Ruby::SexpDecorator.new(sexp).each_sexp_condition.map &DRG::Ruby::Condition.method(:new)
   end
 
   def assignments

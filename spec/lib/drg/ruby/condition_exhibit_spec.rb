@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DRG::Decorators::ConditionDecorator do
+describe DRG::Ruby::ConditionExhibit do
   let(:sexp) { RubyParser.new.parse "return [] unless message[:verification_code_id]" }
   let(:condition) { DRG::Ruby::Condition.new sexp }
 

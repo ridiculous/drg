@@ -81,7 +81,7 @@ class DRG::Ruby::Condition
     nc = Set.new
     s = sexp.drop(1)
     s.flatten.include?(:if) && s.deep_each do |exp|
-      DRG::Decorators::SexpDecorator.new(exp).each_sexp_condition do |node|
+      DRG::Ruby::SexpDecorator.new(exp).each_sexp_condition do |node|
         nc << self.class.new(node)
       end
     end
