@@ -48,7 +48,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
 
   def collect_contexts(condition, indent = '', contexts = [])
     new_indent = indent + (' ' * self.class.default_indent_size)
-    contexts << %Q(#{indent}context #{quote(tr(condition.short_statement))} do) << %Q(#{new_indent}before {})
+    contexts << %Q(#{indent}context #{quote(edit_prefix(condition.short_statement))} do) << %Q(#{new_indent}before {})
     if should_print? condition.return_value
       contexts << %Q(#{new_indent}it #{quote(condition.return_value)} do) << %Q(#{new_indent}end)
     end
@@ -57,18 +57,20 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     end
     contexts << %Q(#{indent}end) << %Q() # /context
     if condition.parts.empty?
-      contexts << %Q(#{indent}context #{quote(tr(negate(condition.short_statement)))} do) << %Q(#{new_indent}before {})
+      contexts << %Q(#{indent}context #{quote(edit_prefix(negate(condition.short_statement)))} do) << %Q(#{new_indent}before {})
       if should_print? condition.else_return_value
         contexts << %Q(#{new_indent}it #{quote(condition.else_return_value)} do) << %Q(#{new_indent}end)
       end
       contexts << %Q(#{indent}end)
     end
     condition.parts.each do |condition_part|
-      contexts << %Q(#{indent}context #{quote(tr(condition_part.short_statement))} do) << %Q(#{new_indent}before {})
-      contexts << %Q(#{new_indent}it #{quote(condition_part.return_value)} do) << %Q(#{new_indent}end)
+      contexts << %Q(#{indent}context #{quote(edit_prefix(condition_part.short_statement))} do) << %Q(#{new_indent}before {})
+      if should_print? condition_part.return_value
+        contexts << %Q(#{new_indent}it #{quote(condition_part.return_value)} do) << %Q(#{new_indent}end)
+      end
       contexts << %Q(#{indent}end)
       if should_print? condition_part.else_return_value
-        contexts << %Q(#{indent}context #{quote(tr(negate(condition_part.short_statement)))} do) << %Q(#{new_indent}before {})
+        contexts << %Q(#{indent}context #{quote(edit_prefix(negate(condition_part.short_statement)))} do) << %Q(#{new_indent}before {})
         contexts << %Q(#{new_indent}it #{quote(condition_part.else_return_value)} do) << %Q(#{new_indent}end)
         contexts << %Q(#{indent}end)
       end
@@ -78,11 +80,19 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
 
   def quote(txt)
     txt = txt.to_s
-    txt.strip!
-    if txt =~ /"|`/
-      "%Q[#{txt.gsub(/\#\{(.*?)\}/m, '\#{\1}')}]"
+    txt.gsub!(/#\{(.*?)\}/m, '\#{\1}') # escape interpolations
+    txt.gsub!(/"/m, '\"') # escape double quotes
+    txt.gsub!(/\\\\/m, '\\') # replace multiple escapes with a single escape
+    %Q("#{truncate(txt)}")
+  end
+
+  def truncate(txt, length = 120)
+    txt = txt.lstrip
+    length -= 3
+    if txt.length > length
+      txt[0, length] + '...'
     else
-      %Q("#{txt}")
+      txt
     end
   end
 
@@ -94,7 +104,7 @@ class DRG::Spec < DelegateClass(DRG::Ruby::Const)
     end
   end
 
-  def tr(phrase)
+  def edit_prefix(phrase)
     phrase.sub! /^if /, 'when '
     phrase.sub! /^not if /, 'unless '
     phrase.sub! /^if not /, 'unless '

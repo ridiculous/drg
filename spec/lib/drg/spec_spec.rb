@@ -7,8 +7,7 @@ describe DRG::Spec do
 
   describe '.generate' do
     it 'returns the spec for the given file as an array of lines' do
-      expect(described_class.generate(file).join("\n")).to eq <<-RUBY
-require "spec_helper"
+      expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
 
 describe Report do
   let(:message) {}
@@ -65,13 +64,13 @@ describe Report do
   describe "#call" do
     it "assigns @duder" do
     end
-    context %Q[unless (message[:verification_code_id] or message["verification_code_id"])] do
+    context "unless (message[:verification_code_id] or message[\\"verification_code_id\\"])" do
       before {}
       it "returns []" do
       end
     end
 
-    context %Q[when (message[:verification_code_id] or message["verification_code_id"])] do
+    context "when (message[:verification_code_id] or message[\\"verification_code_id\\"])" do
       before {}
     end
     context "when (1 == 2)" do
@@ -126,7 +125,7 @@ describe Report do
   end
 
 end
-      RUBY
+)
     end
 
 
@@ -134,8 +133,7 @@ end
       let(:file) { FIXTURE_ROOT.join('extensions.rb') }
 
       it 'returns an array of lines for the file' do
-        expect(described_class.generate(file).join("\n")).to eq <<-RUBY
-require "spec_helper"
+        expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
 
 describe Extensions do
   subject { Class.new { include Extensions }.new }
@@ -143,17 +141,17 @@ describe Extensions do
   describe "#load_and_authorize_item!" do
     context "when coupon.nil?" do
       before {}
-      it %Q[returns fail(Error, "Couldn't find the coupon")] do
+      it "returns fail(Error, \\"Couldn't find the coupon\\")" do
       end
       context "when coupon.expired?" do
         before {}
-        it %Q[returns fail(Error, "Coupon has expired")] do
+        it "returns fail(Error, \\"Coupon has expired\\")" do
         end
       end
 
       context "when coupon.inactive?" do
         before {}
-        it %Q[returns fail(Error, "Coupon is not activated")] do
+        it "returns fail(Error, \\"Coupon is not activated\\")" do
         end
       end
       context "not coupon.inactive?" do
@@ -163,7 +161,7 @@ describe Extensions do
       end
       context "when coupon.inactive?" do
         before {}
-        it %Q[returns fail(Error, "Coupon is not activated")] do
+        it "returns fail(Error, \\"Coupon is not activated\\")" do
         end
       end
 
@@ -176,7 +174,7 @@ describe Extensions do
 
     context "when coupon.cannot_use?" do
       before {}
-      it %Q[returns fail(Error, "Coupon has been used up")] do
+      it "returns fail(Error, \\"Coupon has been used up\\")" do
       end
     end
   end
@@ -203,7 +201,7 @@ describe Extensions do
   end
 
 end
-        RUBY
+)
       end
     end
 
@@ -211,8 +209,7 @@ end
       let(:file) { FIXTURE_ROOT.join('controllers/application_controller.rb') }
 
       it 'rejects multiline statements to protect the client from our shortcomings' do
-        expect(described_class.generate(file).join("\n")).to eq <<-RUBY
-require "spec_helper"
+        expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
 
 describe ApplicationController do
 
@@ -245,7 +242,7 @@ describe ApplicationController do
   end
 
 end
-        RUBY
+)
       end
     end
   end
@@ -333,14 +330,14 @@ end
       let(:txt) { 'File.exists?("file.rb")' }
 
       it 'escapes the double qoutes' do
-        expect(subject.quote(txt)).to eq "%Q[File.exists?(\"file.rb\")]"
+        expect(subject.quote(txt)).to eq "\"File.exists?(\\\"file.rb\\\")\""
       end
 
       context 'when the string has interpolation' do
         let(:txt) { 'File.exists?("#{file}.rb") and name != \'foo\'' }
 
         it 'escapes interpolation' do
-          expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file}.rb\") and name != 'foo']"
+          expect(subject.quote(txt)).to eq "\"File.exists?(\\\"\\\#{file}.rb\\\") and name != 'foo'\""
         end
 
         it 'returns a valid string object' do
@@ -352,14 +349,14 @@ end
 file}.rb")' }
 
           it 'correctly escapes the interpolation' do
-            expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{\nfile}.rb\")]"
+            expect(subject.quote(txt)).to eq "\"File.exists?(\\\"\\\#{\nfile}.rb\\\")\""
           end
 
           context 'when more complicated interpolation' do
             let(:txt) { 'File.exists?("#{file + \'name\'}.rb")' }
 
             it 'correctly escapes the interpolation' do
-              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file + 'name'}.rb\")]"
+              expect(subject.quote(txt)).to eq "\"File.exists?(\\\"\\\#{file + 'name'}.rb\\\")\""
             end
           end
 
@@ -367,7 +364,7 @@ file}.rb")' }
             let(:txt) { 'File.exists?("#{file}.rb") and "#{name} #{age}" == "foo 25"' }
 
             it 'correctly escapes all interpolations' do
-              expect(subject.quote(txt)).to eq "%Q[File.exists?(\"\\\#{file}.rb\") and \"\\\#{name} \\\#{age}\" == \"foo 25\"]"
+              expect(subject.quote(txt)).to eq "\"File.exists?(\\\"\\\#{file}.rb\\\") and \\\"\\\#{name} \\\#{age}\\\" == \\\"foo 25\\\"\""
             end
           end
         end
@@ -377,11 +374,19 @@ file}.rb")' }
         let(:txt) { '`mv #{file_name} #{file_destination}`' }
 
         it 'correctly escapes all interpolations' do
-          expect(subject.quote(txt)).to eq "%Q[`mv \\\#{file_name} \\\#{file_destination}`]"
+          expect(subject.quote(txt)).to eq "\"`mv \\\#{file_name} \\\#{file_destination}`\""
         end
 
         it 'returns a valid string object' do
           expect(eval(subject.quote(txt))).to eq "`mv \#{file_name} \#{file_destination}`"
+        end
+      end
+
+      context 'when the string is already escaped' do
+        let(:txt) { Ruby2Ruby.new.process RubyParser.new.parse('errors << %Q(Couldn\'t find an option with name "#{name}")') }
+
+        it 'returns a valid string object' do
+          expect(eval(subject.quote(txt))).to eq "(errors << \"Couldn't find an option with name \"\#{name}\"\")"
         end
       end
 
