@@ -138,6 +138,14 @@ describe DRG::Ruby::Const do
           expect(subject.type).to eq :class
         end
       end
+
+      context 'with more inheritance' do
+        let(:file) { FIXTURE_ROOT.join('controllers', 'admin', 'setup', 'users', 'profiles_controller.rb')}
+
+        it 'returns the class name' do
+          expect(subject.type).to eq :class
+        end
+      end
     end
   end
 

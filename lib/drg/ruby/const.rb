@@ -25,7 +25,7 @@ class DRG::Ruby::Const
       list.concat parts.drop(parts.size / 2)
     elsif CONSTANT_DEFS.key?(sexp[0])
       list << sexp[1].to_s
-      # recurse unless the second element is nil, which indicates it's the end of the class/module definition
+      # skip when the second element is nil; it's just there sometimes and usually indicates the end of the definition
       if !sexp[2].nil? || (sexp[3].is_a?(Sexp) and CLASS_MOD_DEFS.key?(sexp[3].first))
         compact_sexp = sexp.compact[2]
         if CLASS_MOD_DEFS.key?(compact_sexp.first)

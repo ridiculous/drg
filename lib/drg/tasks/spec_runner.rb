@@ -28,10 +28,14 @@ module DRG
         end
       end
 
+      #
+      # Private
+      #
+
       def generate_spec(ruby_file)
-        spec = DRG::Spec.generate Pathname.new(File.expand_path(ruby_file))
-        if spec
-          spec
+        spec = DRG::Spec.new Pathname.new(File.expand_path(ruby_file))
+        if spec.funcs.any?
+          spec.perform
         else
           log "- #{ruby_file} - no methods", :gray
           nil

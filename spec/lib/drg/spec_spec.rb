@@ -5,9 +5,9 @@ describe DRG::Spec do
 
   subject { described_class.new file }
 
-  describe '.generate' do
+  describe '.perform' do
     it 'returns the spec for the given file as an array of lines' do
-      expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
+      expect(subject.perform.join("\n")).to eq %Q(require "spec_helper"
 
 describe Report do
   let(:message) {}
@@ -17,6 +17,7 @@ describe Report do
   describe ".enqueue" do
     context "unless verification_code" do
       before {}
+
       it "returns nil" do
       end
     end
@@ -40,6 +41,7 @@ describe Report do
   describe "#map_args" do
     context "unless val" do
       before {}
+
       it "returns list" do
       end
     end
@@ -52,6 +54,7 @@ describe Report do
   describe "#go" do
     context "when (@duder == -1)" do
       before {}
+
       it "assigns @go = :ok" do
       end
     end
@@ -64,8 +67,10 @@ describe Report do
   describe "#call" do
     it "assigns @duder" do
     end
+
     context "unless (message[:verification_code_id] or message[\\"verification_code_id\\"])" do
       before {}
+
       it "returns []" do
       end
     end
@@ -75,21 +80,26 @@ describe Report do
     end
     context "when (1 == 2)" do
       before {}
+
       it "returns 0" do
       end
     end
 
     context "not (1 == 2)" do
       before {}
+
       it "returns -1" do
       end
     end
     context "when report.save" do
       before {}
+
       it "returns report.perform" do
       end
+
       context "when user.wants_mail?" do
         before {}
+
         it "returns UserMailer.spam(user).deliver_now" do
         end
       end
@@ -101,11 +111,13 @@ describe Report do
 
     context "when report.save!" do
       before {}
+
       it "returns report.force_perform" do
       end
     end
     context "not report.save!" do
       before {}
+
       it "returns report.failure" do
       end
     end
@@ -133,7 +145,7 @@ end
       let(:file) { FIXTURE_ROOT.join('extensions.rb') }
 
       it 'returns an array of lines for the file' do
-        expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
+        expect(subject.perform.join("\n")).to eq %Q(require "spec_helper"
 
 describe Extensions do
   subject { Class.new { include Extensions }.new }
@@ -141,32 +153,39 @@ describe Extensions do
   describe "#load_and_authorize_item!" do
     context "when coupon.nil?" do
       before {}
+
       it "returns fail(Error, \\"Couldn't find the coupon\\")" do
       end
+
       context "when coupon.expired?" do
         before {}
+
         it "returns fail(Error, \\"Coupon has expired\\")" do
         end
       end
 
       context "when coupon.inactive?" do
         before {}
+
         it "returns fail(Error, \\"Coupon is not activated\\")" do
         end
       end
       context "not coupon.inactive?" do
         before {}
+
         it "assigns @item = coupon" do
         end
       end
       context "when coupon.inactive?" do
         before {}
+
         it "returns fail(Error, \\"Coupon is not activated\\")" do
         end
       end
 
       context "not coupon.inactive?" do
         before {}
+
         it "assigns @item = coupon" do
         end
       end
@@ -174,6 +193,7 @@ describe Extensions do
 
     context "when coupon.cannot_use?" do
       before {}
+
       it "returns fail(Error, \\"Coupon has been used up\\")" do
       end
     end
@@ -209,7 +229,7 @@ end
       let(:file) { FIXTURE_ROOT.join('controllers/application_controller.rb') }
 
       it 'rejects multiline statements to protect the client from our shortcomings' do
-        expect(described_class.generate(file).join("\n")).to eq %Q(require "spec_helper"
+        expect(subject.perform.join("\n")).to eq %Q(require "spec_helper"
 
 describe ApplicationController do
 
@@ -221,12 +241,16 @@ describe ApplicationController do
   describe "#current_user" do
     it "assigns @current_user" do
     end
+
     context "when defined? @current_user" do
       before {}
+
       it "returns @current_user" do
       end
+
       context "when cookies[:auth_token]" do
         before {}
+
         it "returns User.find_by!(:auth_token => cookies[:auth_token])" do
         end
       end
@@ -322,74 +346,6 @@ end
       it 'returns false' do
         expect(subject).to_not be_module
       end
-    end
-  end
-
-  describe '#escape' do
-    context 'when the string has double quotes' do
-      let(:txt) { 'File.exists?("file.rb")' }
-
-      it 'escapes the double qoutes' do
-        expect(subject.escape(txt)).to eq "\"File.exists?(\\\"file.rb\\\")\""
-      end
-
-      context 'when the string has interpolation' do
-        let(:txt) { 'File.exists?("#{file}.rb") and name != \'foo\'' }
-
-        it 'escapes interpolation' do
-          expect(subject.escape(txt)).to eq "\"File.exists?(\\\"\\\#{file}.rb\\\") and name != 'foo'\""
-        end
-
-        it 'returns a valid string object' do
-          expect(eval(subject.escape(txt))).to eq "File.exists?(\"\#{file}.rb\") and name != 'foo'"
-        end
-
-        context 'when interpolation is multiline' do
-          let(:txt) { 'File.exists?("#{
-file}.rb")' }
-
-          it 'correctly escapes the interpolation' do
-            expect(subject.escape(txt)).to eq "\"File.exists?(\\\"\\\#{\nfile}.rb\\\")\""
-          end
-
-          context 'when more complicated interpolation' do
-            let(:txt) { 'File.exists?("#{file + \'name\'}.rb")' }
-
-            it 'correctly escapes the interpolation' do
-              expect(subject.escape(txt)).to eq "\"File.exists?(\\\"\\\#{file + 'name'}.rb\\\")\""
-            end
-          end
-
-          context 'with multiple interpolations' do
-            let(:txt) { 'File.exists?("#{file}.rb") and "#{name} #{age}" == "foo 25"' }
-
-            it 'correctly escapes all interpolations' do
-              expect(subject.escape(txt)).to eq "\"File.exists?(\\\"\\\#{file}.rb\\\") and \\\"\\\#{name} \\\#{age}\\\" == \\\"foo 25\\\"\""
-            end
-          end
-        end
-      end
-
-      context 'when the string has backticks and interpolation' do
-        let(:txt) { '`mv #{file_name} #{file_destination}`' }
-
-        it 'correctly escapes all interpolations' do
-          expect(subject.escape(txt)).to eq "\"`mv \\\#{file_name} \\\#{file_destination}`\""
-        end
-
-        it 'returns a valid string object' do
-          expect(eval(subject.escape(txt))).to eq "`mv \#{file_name} \#{file_destination}`"
-        end
-      end
-
-      context 'when the string is already escaped' do
-        let(:txt) { Ruby2Ruby.new.process RubyParser.new.parse('errors << %Q(Couldn\'t find an option with name "#{name}")') }
-
-        it 'returns a valid string object' do
-          expect(eval(subject.escape(txt))).to eq "(errors << \"Couldn't find an option with name \"\#{name}\"\")"
-        end
-      end
-
     end
   end
 
