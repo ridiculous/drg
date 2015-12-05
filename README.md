@@ -141,6 +141,32 @@ Remove the versions from your Gemfile. A clean start!
 rake drg:unpin
 ```
 
+### Automation
+
+I use the following bash script to update all gems to the latest [major|minor|patch] version, run all tests and then add
+the result if the specs pass or rollback the changes if they fail.
+
+```bash
+#!/bin/bash
+git add Gemfile
+for cmd in $@; do
+	echo "  * Updating $cmd versions"
+	bundle exec rake drg:pin:${cmd}_latest
+	bundle update
+	bundle exec rspec . -t ~js
+	if [ $? -eq 0 ]
+	then
+		echo "  * Tests passed after updating $cmd versions. Adding Gemfile ..."
+		git add Gemfile*
+	else
+		echo "  * Tests failed after updating $cmd versions. Reverting change to Gemfile ..." >&2
+		git checkout -- Gemfile*
+		bundle
+		exit 1
+	fi
+done
+```
+
 ### Skipping gems
 
 You can tell drg to ignore gems by adding an inline comment with @drg (skip|ignore|frozen)
@@ -148,6 +174,10 @@ You can tell drg to ignore gems by adding an inline comment with @drg (skip|igno
 ```ruby
 gem 'name' # @drg skip
 ```
+
+## Changes
+
+Looking for `drg:spec` that does RSpec scaffolding? It's been moved to it's own gem: [rspec-scaffold](https://github.com/ridiculous/rspec-scaffold)  
 
 ## Development
 
