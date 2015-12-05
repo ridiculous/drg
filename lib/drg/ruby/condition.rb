@@ -2,18 +2,6 @@ require 'ruby2ruby'
 
 class DRG::Ruby::Condition
 
-  module SetComparison
-    def eql?(other)
-      hash == other.hash
-    end
-
-    def hash
-      sexp.object_id
-    end
-  end
-
-  include SetComparison
-
   attr_reader :statement, :nested_conditions, :sexp, :parts, :unless_found
 
   def initialize(sexp)
@@ -98,5 +86,17 @@ class DRG::Ruby::Condition
       end
     end
     nc.to_a
+  end
+
+  #
+  # Used for Set comparison
+  #
+
+  def eql?(other)
+    hash == other.hash
+  end
+
+  def hash
+    sexp.object_id
   end
 end
