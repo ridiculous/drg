@@ -20,6 +20,15 @@ describe DRG::Ruby::Const do
         it "returns the module type" do
           expect(subject.name).to eq 'Mixins::Models'
         end
+
+        context 'when the module has a const after the module declaration' do
+          let(:file) { FIXTURE_ROOT.join('mixins/helpers.rb') }
+
+          it 'returns the correct module name' do
+            expect(subject.name).to eq 'Mixins::Helpers'
+            expect(Kernel.const_get(subject.name)).to eq Mixins::Helpers
+          end
+        end
       end
     end
 
@@ -33,6 +42,7 @@ describe DRG::Ruby::Const do
 
         it 'returns the class names in the file' do
           expect(subject.name).to eq 'ReservationsController'
+          expect(Kernel.const_get(subject.name)).to eq ReservationsController
         end
       end
 
@@ -41,6 +51,7 @@ describe DRG::Ruby::Const do
 
         it 'returns the full modularized name' do
           expect(subject.name).to eq 'Extensions::Array'
+          expect(Kernel.const_get(subject.name)).to eq Extensions::Array
         end
       end
 
@@ -57,6 +68,16 @@ describe DRG::Ruby::Const do
 
         it 'returns the class name' do
           expect(subject.name).to eq 'Admin::Super::UsersController'
+          expect(Kernel.const_get(subject.name)).to eq Admin::Super::UsersController
+        end
+
+        context 'with more inheritance' do
+          let(:file) { FIXTURE_ROOT.join('controllers', 'admin', 'setup', 'users', 'profiles_controller.rb')}
+
+          it 'returns the class name' do
+            expect(subject.name).to eq 'Admin::Setup::Users::PofilesController'
+            expect(Kernel.const_get(subject.name)).to eq Admin::Setup::Users::PofilesController
+          end
         end
       end
     end

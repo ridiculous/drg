@@ -13,10 +13,13 @@ class DRG::Ruby::Const
     @sexp = sexp
   end
 
-  # s(:module, :Admin, s(:class, :Super, nil, s(:class, :UsersController, s(:colon3, :ApplicationController), s(:defn, :name, s(:args)
-  # s(:class, :Report, nil, s(:cdecl, :DEFAULT_TZ, s(:str, "UTC")), s(:defs, s(:self), :enqueue,
+  # @description Extracts the class/mod definition from a Sexp object. Handles stuff that looks like:
+  #   - s(:module, :Admin, s(:class, :Super, nil, s(:class, :UsersController, s(:colon3, :ApplicationController), s(:defn, :name, s(:args)
+  #   - s(:class, :Report, nil, s(:cdecl, :DEFAULT_TZ, s(:str, "UTC")), s(:defs, s(:self), :enqueue,
+  #   - s(:module, s(:colon2, s(:const, :Mixins), :Models))
+  #   - s(:module, :Mixins, s(:module, :Helpers, s(:cdecl, :CSS, s(:str, "height:0"))))
+  #   - s(:module, :Admin, s(:class, :Super, nil, s(:class, :UsersController, s(:colon3, :ApplicationController), s(:defn, :name, s(:args), ...))))
   def name(sexp = @sexp, list = [])
-    sexp = Array(sexp)
     if sexp[1].is_a?(Sexp) && sexp[1][0] == :colon2
       parts = sexp[1].to_a.flatten
       list.concat parts.drop(parts.size / 2)
@@ -24,7 +27,10 @@ class DRG::Ruby::Const
       list << sexp[1].to_s
       # recurse unless the second element is nil, which indicates it's the end of the class/module definition
       if !sexp[2].nil? || (sexp[3].is_a?(Sexp) and CLASS_MOD_DEFS.key?(sexp[3].first))
-        name(sexp.compact[2], list)
+        compact_sexp = sexp.compact[2]
+        if CLASS_MOD_DEFS.key?(compact_sexp.first)
+          name(compact_sexp, list)
+        end
       end
     end
     list.join('::')

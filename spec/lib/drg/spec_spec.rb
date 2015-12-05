@@ -1,6 +1,4 @@
 require 'spec_helper'
-dir_pattern = File.expand_path('./spec/fixtures/**/*.rb')
-Dir[dir_pattern].sort.each &method(:require)
 
 describe DRG::Spec do
   let(:file) { FIXTURE_ROOT.join('report.rb') }
