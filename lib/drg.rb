@@ -11,8 +11,6 @@ module DRG
   DuckPuncher.punch! :Object
 
   autoload :Tasks, 'drg/tasks'
-  autoload :Ruby, 'drg/ruby'
-  autoload :Spec, 'drg/spec'
 end
 
 load 'tasks/drg.rake'

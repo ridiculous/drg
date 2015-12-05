@@ -46,12 +46,4 @@ namespace :drg do
     task latest_minor: :minor_latest
     task latest_patch: :patch_latest
   end
-
-  task :spec, [:file_name] => :environment do |_, args|
-    DRG::Tasks::SpecRunner.new(args.file_name).perform
-  end
-
-  task :environment do
-    # no-op hook task
-  end if !Rake::Task.task_defined?(:environment) and !defined?(Rails)
 end

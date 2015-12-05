@@ -1,3 +1,0 @@
-module Mixins::Models
-
-end
