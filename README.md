@@ -1,7 +1,4 @@
-# DRG
-[![Code Climate](https://codeclimate.com/github/ridiculous/drg/badges/gpa.svg)](https://codeclimate.com/github/ridiculous/drg)
-[![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg)
-[![Build Status](https://travis-ci.org/ridiculous/drg.svg)](https://travis-ci.org/ridiculous/drg)
+# DRG [![Code Climate](https://codeclimate.com/github/ridiculous/drg/badges/gpa.svg)](https://codeclimate.com/github/ridiculous/drg) [![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg) [![Build Status](https://travis-ci.org/ridiculous/drg.svg)](https://travis-ci.org/ridiculous/drg)
 
 
 A Ruby utility to help automate dependency management using Bundler. You can pin Gem versions to the current or the next
