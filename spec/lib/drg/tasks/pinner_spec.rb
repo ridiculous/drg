@@ -12,8 +12,8 @@ describe DRG::Tasks::Pinner do
       let(:gem) { double(DRG::Tasks::GemfileLine) }
 
       it 'calls +update+ on the @gemfile with the -gem- and -version-' do
-        expect(subject.gemfile).to receive(:find_by_name).with('pry').and_return(gem)
-        expect(subject.gemfile).to receive(:update).with(gem, '0.10.1')
+        expect(subject.gemfile).to receive(:find_by_name).with('rake').and_return(gem)
+        expect(subject.gemfile).to receive(:update).with(gem, '10.4.2')
         subject.perform
       end
     end

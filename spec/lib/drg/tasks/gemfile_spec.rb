@@ -1,7 +1,19 @@
 require 'spec_helper'
 
 describe DRG::Tasks::Gemfile do
+  subject { described_class.new FIXTURE_ROOT.join('Gemfile') }
+
   let(:gem) { subject.find_by_name('pry') }
+
+  describe '#initialize' do
+    context 'when no Gemfile is specified' do
+      subject { described_class.new }
+
+      it "defaults to Bundler's Gemfile" do
+        expect(subject.file).to eq Bundler.default_gemfile
+      end
+    end
+  end
 
   describe '#remove_version' do
     before { allow(subject).to receive(:write) }
