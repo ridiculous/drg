@@ -1,6 +1,8 @@
 # DRG
 [![Code Climate](https://codeclimate.com/github/ridiculous/drg/badges/gpa.svg)](https://codeclimate.com/github/ridiculous/drg)
 [![Gem Version](https://badge.fury.io/rb/drg.svg)](http://badge.fury.io/rb/drg)
+[![Build Status](https://travis-ci.org/ridiculous/drg.svg)](https://travis-ci.org/ridiculous/drg)
+
 
 A Ruby utility to help automate dependency management using Bundler. You can pin Gem versions to the current or the next
 available level.
@@ -143,29 +145,9 @@ rake drg:unpin
 
 ### Automation
 
-I use the following bash script to update all gems to the latest [major|minor|patch] version, run all tests and then add
-the result if the specs pass or rollback the changes if they fail.
-
-```bash
-#!/bin/bash
-git add Gemfile
-for cmd in $@; do
-	echo "  * Updating $cmd versions"
-	bundle exec rake drg:pin:${cmd}_latest
-	bundle update
-	bundle exec rspec . -t ~js
-	if [ $? -eq 0 ]
-	then
-		echo "  * Tests passed after updating $cmd versions. Adding Gemfile ..."
-		git add Gemfile*
-	else
-		echo "  * Tests failed after updating $cmd versions. Reverting change to Gemfile ..." >&2
-		git checkout -- Gemfile*
-		bundle
-		exit 1
-	fi
-done
-```
+I use the [bin/drg](https://github.com/ridiculous/drg/blob/master/bin/drg) bash script to update all gems to the latest 
+[major|minor|patch] version, run all tests and then add the result if the specs pass or rollback the changes if they 
+fail (e.g. `bin/drg patch`). 
 
 ### Skipping gems
 
