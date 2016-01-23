@@ -17,14 +17,16 @@ gem 'drg'
 ## Tasks
 
 ```bash
-rake drg:pin
-rake drg:pin:major
-rake drg:pin:minor
-rake drg:pin:patch
-rake drg:pin:latest
-rake drg:pin:patch_latest
-rake drg:pin:minor_latest
-rake drg:unpin
+% rake -T
+rake drg:pin                         # Pin the gems in your Gemfile to the current version in the Gemfile.lock
+rake drg:pin:major                   # Add the approximate major version of your gems (rails, "~> 4")
+rake drg:pin:minor                   # Add the approximate minor version of your gems (rails, "~> 4.2")
+rake drg:pin:patch                   # Add the approximate patch version of your gems (rails, "~> 4.2.3")
+rake drg:pin:latest[gem_name]        # Pin the given gem to the latest version (defaults to all gems)
+rake drg:pin:minor_latest[gem_name]  # Pin the given gem to the latest available patch version (defaults to all gems)
+rake drg:pin:patch_latest[gem_name]  # Pin the given gem to the latest available minor version (defaults to all gems)
+rake drg:unpin                       # Unpin the gems in your Gemfile
+rake spec                            # Run all tests
 ```
 
 ### drg:pin
