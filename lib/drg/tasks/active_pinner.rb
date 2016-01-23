@@ -43,7 +43,7 @@ module DRG
           gemfile.update gem, latest_version
           spec.name
         else
-          log %Q(No newer #{type} versions found for "#{spec.name}")
+          log %Q(No newer #{type} versions found for "#{spec.name}"), :grey
         end
       end
 
