@@ -4,7 +4,10 @@ require 'bundler/setup'
 require 'pp'
 require 'rspec'
 require 'irb'
-require 'object_tracker'
 require_relative '../spec/spec_helper'
+begin
+  require 'object_tracker'
+rescue LoadError
+end
 
 IRB.start

@@ -4,7 +4,7 @@ module DRG
       module_function
 
       def log(msg = nil, color = :green)
-        say %Q(  <%= color('#{msg}', :#{color}) %>)
+        HighLine.new.say %Q(  <%= color('#{msg}', :#{color}) %>)
       end
     end
   end
