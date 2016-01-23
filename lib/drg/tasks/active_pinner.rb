@@ -14,30 +14,36 @@ module DRG
       end
 
       def perform(gem_name = nil)
+        updated_gems = []
         if gem_name
-          update gem_name
+          updated_gems << update(gem_name)
         else
           Updater.new.perform do |gems|
             load_versions gems
-            gems.each &method(:update)
+            gems.each do |gem|
+              updated_gems << update(gem)
+            end
           end
         end
+        updated_gems.compact!
         log %Q(Done)
+        log %Q(You may want to run: "bundle update #{updated_gems.join ' '}") if updated_gems.any?
         gemfile.write if gemfile.saved_lines.any?
       end
 
       # @note calls #latest_minor_version and #latest_patch_version
+      # @returns [nil|String]
       def update(gem_name)
         spec = ::Bundler.locked_gems.specs.find { |spec| spec.name == gem_name }
         gem = spec && gemfile.find_by_name(spec.name)
-        if gem
-          latest_version = public_send("latest_#{type}_version", spec.name, spec.version)
-          if latest_version
-            log %Q(Updating "#{spec.name}" from #{spec.version.to_s} to #{latest_version})
-            gemfile.update gem, latest_version
-          else
-            log %Q(No newer #{type} versions found for "#{spec.name}")
-          end
+        return nil unless gem
+        latest_version = public_send("latest_#{type}_version", spec.name, spec.version)
+        if latest_version
+          log %Q(Updating "#{spec.name}" from #{spec.version.to_s} to #{latest_version})
+          gemfile.update gem, latest_version
+          spec.name
+        else
+          log %Q(No newer #{type} versions found for "#{spec.name}")
         end
       end
 
