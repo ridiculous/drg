@@ -1,9 +1,9 @@
 require 'rake'
 
 namespace :drg do
-  desc "Pin the gems in your Gemfile to the current version in the Gemfile.lock"
+  desc "Pin the gems in your Gemfile to the current approximate version in the Gemfile.lock"
   task :pin do
-    DRG::Tasks::Pinner.new.perform
+    DRG::Tasks::Pinner.new(:minor).perform
   end
 
   desc 'Unpin the gems in your the Gemfile'
