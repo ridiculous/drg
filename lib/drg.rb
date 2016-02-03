@@ -7,8 +7,7 @@ require 'duck_puncher'
 require 'drg/version'
 
 module DRG
-  # defines Object#clone! which provides a deep clone
-  DuckPuncher.punch! :Object
+  DuckPuncher.punch! :Object, only: :clone!
 
   autoload :Tasks, 'drg/tasks'
 end
