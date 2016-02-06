@@ -26,7 +26,6 @@ rake drg:pin:latest[gem]        # Pin the given gem to the latest version (defau
 rake drg:pin:minor_latest[gem]  # Pin the given gem to the latest available patch version (defaults to all gems)
 rake drg:pin:patch_latest[gem]  # Pin the given gem to the latest available minor version (defaults to all gems)
 rake drg:unpin                  # Unpin the gems in your Gemfile
-rake spec                       # Run all tests
 ```
 
 ### drg:pin
@@ -39,7 +38,7 @@ or `:path` will be ignored. You can "pin" all your versions to the current versi
 rake drg:pin
 ```
 
-This task will update your Gemfile with the gem's full version. It'll change:
+This task will update your Gemfile with the gem's approximate version. It'll change:
 
 ```ruby
 gem 'rails'
@@ -51,10 +50,10 @@ gem 'drg' # need this
 to:
 
 ```ruby
-gem 'rails', '4.2.3'
-gem 'byebug', '5.0.0', require: false
-gem 'therubyracer', '0.12.2', platforms: :ruby
-gem 'drg', '0.4.1' # need this
+gem 'rails', '~> 4.2'
+gem 'byebug', '~> 5.0', require: false
+gem 'therubyracer', '~> 0.12', platforms: :ruby
+gem 'drg', '~> 1.2'
 ```
 
 ### Automation
