@@ -44,7 +44,7 @@ This task will update your Gemfile with the gem's approximate version. It'll cha
 gem 'rails'
 gem 'byebug', require: false
 gem 'therubyracer', '~> 0.12', platforms: :ruby
-gem 'drg' # need this
+gem 'drg' # :)
 ```
 
 to:
@@ -53,7 +53,7 @@ to:
 gem 'rails', '~> 4.2'
 gem 'byebug', '~> 5.0', require: false
 gem 'therubyracer', '~> 0.12', platforms: :ruby
-gem 'drg', '~> 1.2'
+gem 'drg', '~> 1.2' # :)
 ```
 
 ### Automation
