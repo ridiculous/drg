@@ -10,8 +10,8 @@ module DRG
 
       # @param [String] version is the new value for the gem (add/replace)
       # @return [String] line
-      def update(version)
-        swap_version(", '#{version.to_s}'")
+      def update(new_version)
+        swap_version(", '#{new_version.to_s}'")
       end
 
       # @return [String] line
