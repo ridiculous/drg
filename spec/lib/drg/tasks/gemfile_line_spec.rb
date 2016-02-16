@@ -26,6 +26,12 @@ describe DRG::Tasks::GemfileLine do
           subject.update('4.2.1')
         }.to change(subject, :version).from(nil).to("'4.2.1'")
       end
+
+      it 'updates the line correctly' do
+        expect {
+          subject.update('4.2.1')
+        }.to change(subject, :line).to("  gem 'byebug', '4.2.1'\n")
+      end
     end
 
     context "when the gem is at the end of the file with no new line character" do

@@ -87,6 +87,13 @@ describe DRG::Tasks::Gemfile do
         subject.update(gem, '2.2.1')
       }.to change(gem, :to_s).to(%Q(gem 'aws-sdk',                  '2.2.1'   # Amazon Web Services\n))
     end
+
+    it 'updates the "whenever" gem with the given -version-' do
+      gem = subject.find_by_name('whenever')
+      expect {
+        subject.update(gem, '~> 2.6')
+      }.to change(gem, :to_s).to(%Q(gem "whenever", '~> 2.6',                 require: false\n))
+    end
   end
 
   describe '#find_by_name' do

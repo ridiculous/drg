@@ -19,7 +19,7 @@ module DRG
         swap_version('')
       end
 
-      # @return [String] line
+      # @description Replaces the gem version with the given one
       # @example
       #
       #   line = "gem 'duck_puncher', '> 1', '< 2', require: false   # dude"
@@ -27,12 +27,13 @@ module DRG
       #   line # => "gem 'duck_puncher', '1.5.5', require: false   # dude"
       #
       # @destructive Modifies @line in place
-      # @todo AVOID check for comment and inline comments by ignoring those parts
+      # @param [String] full_version is the quoted version to update or remove from the gem line
+      # @return [String] line
       def swap_version(full_version)
-        # separate code and comments
         code, *comments = line.split(/#/)
         parts = code.split(',')
         if parts.size == 1
+          parts[0].chomp!
           parts << " #{full_version}" unless full_version.empty?
         else
           # ignore the first part, which is the gem name
@@ -42,11 +43,14 @@ module DRG
           # remove all but the first version part from the original parts array
           version_parts.drop(1).each { |version_part| parts.delete(version_part) }
           # find the index of it
-          index = parts.index(version_parts.first)
-          # replace the current gem version (inside quotes)
-          parts[index].sub! /['"].+['"]/, full_version
-          # remove white spaces from this item if we're removing the version
-          parts[index].strip! if full_version.empty?
+          if index = parts.index(version_parts.first)
+            # replace the current gem version (inside quotes)
+            parts[index].sub! /['"].+['"]/, full_version
+            # remove white spaces from this item if we're removing the version
+            parts[index].strip! if full_version.empty?
+          else
+            parts.insert 1, " #{full_version}"
+          end
           parts.reject!(&:empty?)
         end
         line.replace parts.join(',')
