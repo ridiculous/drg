@@ -54,6 +54,13 @@ describe DRG::Tasks::Gemfile do
       }.to change(gem, :to_s).from(%Q(  gem 'byebug', require: false\n)).to(%Q(  gem 'byebug', '5.0.0', require: false\n))
     end
 
+    it 'updates the "usable" gem to the given -version-' do
+      gem = subject.find_by_name('rack-cache')
+      expect {
+        subject.update(gem, '1.5.1')
+      }.to change(gem, :to_s).from(%Q(  gem 'rack-cache', '~> 1.2', :require => 'rack/cache'\n)).to(%Q(  gem 'rack-cache', '1.5.1', :require => 'rack/cache'\n))
+    end
+
     it 'updates the "slop" gem to the given -version-' do
       gem = subject.find_by_name('slop')
       expect {

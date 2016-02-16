@@ -8,6 +8,7 @@ group :development, :test do
   gem "pry", '~> 0.10'
   gem 'object_tracker', '>= 1.0.5'
   gem 'byebug', require: false
+  gem 'rack-cache', '~> 1.2', :require => 'rack/cache'
 end
 gem 'ruby_parser', '3.7.1'
 gem 'slop'

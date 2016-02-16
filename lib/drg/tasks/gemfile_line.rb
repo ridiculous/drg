@@ -23,7 +23,9 @@ module DRG
       def swap_version(full_version)
         comment = line =~ /#/ ? " #{line.slice!(/#.*/).strip}" : ''
         if line =~ /,.+\n?/
-          if line =~ /,\s*['"].+['"]/
+          if line =~ /,.*[\d.]+.*,.*require.+/
+            line.sub! /,\s*['"].+['"]\s*,\s*/, "#{full_version}, "
+          elsif line =~ /,\s*['"].+['"]/
             line[/,\s*['"].+['"]/] = full_version
           else
             line[/,\s*/] = "#{full_version}, "
