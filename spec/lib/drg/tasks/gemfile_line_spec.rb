@@ -45,7 +45,7 @@ describe DRG::Tasks::GemfileLine do
         expect {
           subject.update('4.2.1')
         }.to change(subject, :version).from("'> 0.2.0', '< 1.0.0'").to("'4.2.1'")
-        expect(subject.line).to eq(%Q(  gem 'byebug', '4.2.1'))
+        expect(subject.line).to eq(%Q(  gem 'byebug', '4.2.1'\n))
       end
     end
 
@@ -66,7 +66,7 @@ describe DRG::Tasks::GemfileLine do
       it 'replaces the version and keeps the :require setting' do
         expect {
           subject.update('4.2.1')
-        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1', require: false))
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1', require: false\n))
       end
     end
 
@@ -76,7 +76,7 @@ describe DRG::Tasks::GemfileLine do
       it 'adds the version before the comment' do
         expect {
           subject.update('4.2.1')
-        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1' #, '> 0.2.0', require: false\n))
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1'#, '> 0.2.0', require: false\n))
       end
     end
 
@@ -86,7 +86,7 @@ describe DRG::Tasks::GemfileLine do
       it 'adds the version before the comment' do
         expect {
           subject.update('4.2.1')
-        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1' #\n))
+        }.to change(subject, :line).to(%Q(  gem 'byebug', '4.2.1'#\n))
       end
     end
   end

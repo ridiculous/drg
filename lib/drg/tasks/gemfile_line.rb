@@ -11,7 +11,7 @@ module DRG
       # @param [String] version is the new value for the gem (add/replace)
       # @return [String] line
       def update(new_version)
-        swap_version(", '#{new_version.to_s}'")
+        swap_version("'#{new_version.to_s}'")
       end
 
       # @return [String] line
@@ -20,26 +20,43 @@ module DRG
       end
 
       # @return [String] line
+      # @example
+      #
+      #   line = "gem 'duck_puncher', '> 1', '< 2', require: false   # dude"
+      #   swap_version('1.5.5')
+      #   line # => "gem 'duck_puncher', '1.5.5', require: false   # dude"
+      #
+      # @destructive Modifies @line in place
+      # @todo AVOID check for comment and inline comments by ignoring those parts
       def swap_version(full_version)
-        comment = line =~ /#/ ? " #{line.slice!(/#.*/).strip}" : ''
-        if line =~ /,.+\n?/
-          if line =~ /,.*[\d.]+.*,.*require.+/
-            line.sub! /,\s*['"].+['"]\s*,\s*/, "#{full_version}, "
-          elsif line =~ /,\s*['"].+['"]/
-            line[/,\s*['"].+['"]/] = full_version
-          else
-            line[/,\s*/] = "#{full_version}, "
-            line[/\n/] = "#{comment}\n"
-          end
-        elsif line.end_with?("\n")
-          line.sub!("\n", "#{full_version}#{comment}\n")
+        # separate code and comments
+        code, *comments = line.split(/#/)
+        parts = code.split(',')
+        if parts.size == 1
+          parts << " #{full_version}" unless full_version.empty?
         else
-          line << full_version  << comment << "\n"
+          # ignore the first part, which is the gem name
+          parts_without_gem = parts.drop(1)
+          # reject options hash
+          version_parts = parts_without_gem.reject { |x| x.include?(':') }
+          # remove all but the first version part from the original parts array
+          version_parts.drop(1).each { |version_part| parts.delete(version_part) }
+          # find the index of it
+          index = parts.index(version_parts.first)
+          # replace the current gem version (inside quotes)
+          parts[index].sub! /['"].+['"]/, full_version
+          # remove white spaces from this item if we're removing the version
+          parts[index].strip! if full_version.empty?
+          parts.reject!(&:empty?)
         end
+        line.replace parts.join(',')
+        line << "#" << comments.join if comments.any?
+        line << "\n" unless line.end_with?("\n")
         line
       end
 
       # @note not used
+      # @deprecated
       def version
         line[/, (.+)\n?/, 1]
       end

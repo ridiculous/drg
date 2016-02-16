@@ -22,6 +22,19 @@ describe DRG::Tasks::Gemfile do
       original_lines = subject.lines.clone!
       expect { subject.remove_version(gem) }.to change { subject.saved_lines }.from([]).to([original_lines])
     end
+
+    it 'removes the version for the gem' do
+      gem = subject.find_by_name('rack-cache')
+      expect { subject.remove_version(gem) }.to change(gem, :to_s).to(%Q(  gem 'rack-cache', :require => 'rack/cache'\n))
+    end
+
+    context "whent the gem doesn't have a gem version set" do
+      it 'does nothing' do
+        gem = subject.find_by_name('usable')
+        expect { subject.remove_version(gem) }.to_not change(gem, :to_s)
+      end
+    end
+
   end
 
   describe '#update' do
@@ -31,7 +44,7 @@ describe DRG::Tasks::Gemfile do
     end
 
     it 'updates the gem index in @lines to the given -version-' do
-      expect { subject.update(gem, '0.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '0.10.1'\n))
+      expect { subject.update(gem, '~> 1.10.1') }.to change { subject.lines[gem] }.to(%Q(  gem "pry", '~> 1.10.1'\n))
     end
 
     it 'updates the "pry" gem to the given -version-' do
@@ -51,14 +64,14 @@ describe DRG::Tasks::Gemfile do
       gem = subject.find_by_name('byebug')
       expect {
         subject.update(gem, '5.0.0')
-      }.to change(gem, :to_s).from(%Q(  gem 'byebug', require: false\n)).to(%Q(  gem 'byebug', '5.0.0', require: false\n))
+      }.to change(gem, :to_s).to(%Q(  gem 'byebug', '5.0.0', :require => false\n))
     end
 
-    it 'updates the "usable" gem to the given -version-' do
+    it 'updates the "rack-cache" gem to the given -version-' do
       gem = subject.find_by_name('rack-cache')
       expect {
         subject.update(gem, '1.5.1')
-      }.to change(gem, :to_s).from(%Q(  gem 'rack-cache', '~> 1.2', :require => 'rack/cache'\n)).to(%Q(  gem 'rack-cache', '1.5.1', :require => 'rack/cache'\n))
+      }.to change(gem, :to_s).to(%Q(  gem 'rack-cache', '1.5.1', :require => 'rack/cache'\n))
     end
 
     it 'updates the "slop" gem to the given -version-' do
@@ -66,6 +79,13 @@ describe DRG::Tasks::Gemfile do
       expect {
         subject.update(gem, '3.6.0')
       }.to change(gem, :to_s).from(%Q(gem 'slop')).to(%Q(gem 'slop', '3.6.0'\n))
+    end
+
+    it 'updates the "aws-sdk" gem to the given -version- and preserves spacing' do
+      gem = subject.find_by_name('aws-sdk')
+      expect {
+        subject.update(gem, '2.2.1')
+      }.to change(gem, :to_s).to(%Q(gem 'aws-sdk',                  '2.2.1'   # Amazon Web Services\n))
     end
   end
 
@@ -126,7 +146,7 @@ describe DRG::Tasks::Gemfile do
     context 'when the requested gem is commented out' do
       it 'returns nil' do
         expect(subject.find_by_name('rubocop')).to be_nil
-        expect(subject.find_by_name('duck_puncher')).to be_nil
+        expect(subject.find_by_name('foo')).to be_nil
       end
     end
 
