@@ -107,8 +107,18 @@ module DRG
       # @param [Array] list of a gem version's segments
       # @param [Array] other_list of another gem version's segments
       def higher?(list, other_list)
-        gem_version_segments = (0..2).to_a
-        gem_version_segments.any? { |i| list[i].to_i > other_list[i].to_i }
+        higher = false
+        equal = false
+        sem_ver_size = [list.size, other_list.size].max
+        sem_ver_size.times do |i|
+          if list[i].to_i >= other_list[i].to_i
+            higher = true
+            equal = list[i].to_i == other_list[i].to_i
+          else
+            break
+          end
+        end
+        higher && !equal
       end
     end
   end

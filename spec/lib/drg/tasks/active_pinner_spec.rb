@@ -32,22 +32,25 @@ describe DRG::Tasks::ActivePinner do
 
   describe '#higher?' do
     before { subject.versions = { 'pg' => versions } }
+
     context 'when -list- has a higher semantic version that -other_list-' do
       it 'returns true' do
         expect(subject.higher?([0, 29, 11], [0, 29, 1])).to be true
         expect(subject.higher?([1, 0, 0], [0, 29, 1])).to be true
         expect(subject.higher?([2, 1, 23], [2, 1, 22])).to be true
         expect(subject.higher?([0, 8, 0], [0, 7, 9, 2008, 10, 13])).to be true
+        expect(subject.higher?([4, 2, 5, 1], [4, 1, 14, 1])).to be true
       end
     end
 
     context 'when -list- does not have a higher semantic version that -other_list-' do
-      it 'returns true' do
+      it 'returns false' do
         expect(subject.higher?([1, 0, 0], [1, 0, 0])).to be false
         expect(subject.higher?([1, 0, 0], [2, 0, 0])).to be false
         expect(subject.higher?([1, 2, 33], [1, 2, 34])).to be false
         expect(subject.higher?([0, 2, 0], [0, 2, 1])).to be false
         expect(subject.higher?([0, 2, 1], [0, 2, 11])).to be false
+        expect(subject.higher?([4, 1, 14, 1], [4, 2, 5, 1])).to be false
       end
     end
   end
