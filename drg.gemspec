@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
 
   spec.add_dependency 'bundler', '~> 1.10'
-  spec.add_dependency 'duck_puncher', '>= 2.0.0', '< 3.0.0'
+  spec.add_dependency 'duck_puncher', '>= 4.2.2', '< 5.0.0'
   spec.add_dependency 'highline', '~> 1.6'
 
   spec.add_development_dependency 'rake', '~> 10.0'
