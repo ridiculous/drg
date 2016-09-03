@@ -74,6 +74,12 @@ gem 'name' # @drg skip
 
 Looking for `drg:spec` that does RSpec scaffolding? It's been moved to it's own gem: [rspec-scaffold](https://github.com/ridiculous/rspec-scaffold)  
 
+## Issues
+
+Having trouble on Rails 3? Try updating to the latest version or make sure the
+line with `gem 'drg'` is outside of the `:development` and `:test` blocks. It
+Needs to be at the top level for some reason.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. 
