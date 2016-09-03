@@ -10,4 +10,8 @@ module DRG
   autoload :Tasks, 'drg/tasks'
 end
 
-require 'drg/railtie' if defined?(Rails)
+if defined?(Rails)
+  require 'drg/railtie'
+else
+  load 'tasks/drg.rake'
+end
