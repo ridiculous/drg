@@ -1,8 +1,6 @@
 module DRG
   module Tasks
     class Gemfile
-      DuckPuncher.punch! :Object, only: :clone!
-
       attr_accessor :file
 
       def initialize(file = ::Bundler.default_gemfile)
@@ -14,12 +12,12 @@ module DRG
       # @param [GemfileLine] gem
       # @param [String] version to update the gem line with
       def update(gem, version)
-        saved_lines << lines.clone!
+        saved_lines << Marshal.load(Marshal.dump(lines))
         lines[gem] = gem.update version
       end
 
       def remove_version(gem)
-        saved_lines << lines.clone!
+        saved_lines << Marshal.load(Marshal.dump(lines))
         lines[gem] = gem.remove_version
         write
       end

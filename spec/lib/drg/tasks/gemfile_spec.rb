@@ -19,7 +19,7 @@ describe DRG::Tasks::Gemfile do
     before { allow(subject).to receive(:write) }
 
     it 'assigns the current value of @lines to @saved_lines' do
-      original_lines = subject.lines.clone!
+      original_lines = Marshal.load(Marshal.dump(subject.lines))
       expect { subject.remove_version(gem) }.to change { subject.saved_lines }.from([]).to([original_lines])
     end
 
@@ -39,7 +39,7 @@ describe DRG::Tasks::Gemfile do
 
   describe '#update' do
     it 'assigns the current value of @lines to @saved_lines' do
-      original_lines = subject.lines.clone!
+      original_lines = Marshal.load(Marshal.dump(subject.lines))
       expect { subject.update(gem, '0.10.1') }.to change { subject.saved_lines }.from([]).to([original_lines])
     end
 

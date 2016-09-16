@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 # Specify your gem's dependencies in drg.gemspec
 gemspec
-# gem 'duck_puncher'
 gem 'usable'
 group :development, :test do
   # gem 'rubocop', '~> 0.29', require: false
@@ -14,5 +13,4 @@ end
 gem 'ruby_parser', '3.7.1'
 gem 'aws-sdk',                  '>= 1.56.0'   # Amazon Web Services
 gem "whenever",                 require: false
-gem 'duck_puncher', '> 1', '< 2'
 gem 'slop'
