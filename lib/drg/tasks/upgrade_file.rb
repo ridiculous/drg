@@ -14,7 +14,7 @@ module DRG
           contents = File.read(ruby_file)
           log %(Updating "#{ruby_file}")
           contents.gsub! /:(\w+)\s?=>/, '\1:'
-          contents.gsub!(/([A-Z]*[a-z0-9_!?.\[\]'()+=>:,&]+)\.(should)\s?==/, 'expect(\1).to eq')
+          # contents.gsub!(/([A-Z]*[a-z0-9_!?.\[\]'()+=>:,&]+)\.(should)\s?==/, 'expect(\1).to eq')
           contents.gsub! /Factory\.create/, 'create'
           contents.gsub! /Factory\.build/, 'build'
           contents.gsub! /Factory\.next/, 'generate'
