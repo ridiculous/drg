@@ -7,5 +7,6 @@ module DRG
     autoload :GemfileLine, 'drg/tasks/gemfile_line'
     autoload :Log, 'drg/tasks/log'
     autoload :SpecRunner, 'drg/tasks/spec_runner'
+    autoload :UpgradeFile, 'drg/tasks/upgrade_file'
   end
 end

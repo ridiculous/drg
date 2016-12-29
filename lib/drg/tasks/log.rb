@@ -5,6 +5,7 @@ module DRG
 
       def log(msg = nil, color = :green)
         HighLine.new.say %Q(  <%= color('#{msg}', :#{color}) %>)
+        $stdout.flush
       end
     end
   end

@@ -46,4 +46,10 @@ namespace :drg do
     task latest_minor: :minor_latest
     task latest_patch: :patch_latest
   end
+
+  desc 'Upgrade files with the latest syntax for Ruby 2, FactoryGirl 3, and RSpec 3'
+  task :upgrade_file, [:file_name] do |_, options|
+    file = options[:file_name] || Bundler.root.join('spec', '**', '*_spec.rb')
+    DRG::Tasks::UpgradeFile.new(file).call
+  end
 end

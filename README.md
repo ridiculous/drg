@@ -26,6 +26,7 @@ rake drg:pin:latest[gem]        # Pin the given gem to the latest version (defau
 rake drg:pin:minor_latest[gem]  # Pin the given gem to the latest available patch version (defaults to all gems)
 rake drg:pin:patch_latest[gem]  # Pin the given gem to the latest available minor version (defaults to all gems)
 rake drg:unpin                  # Unpin the gems in your Gemfile
+rake drg:upgrade_file[file]     # Updates the file to use Ruby 2 hash syntax and fixes RSpec and FactoryGirl deprecations
 ```
 
 ### drg:pin
