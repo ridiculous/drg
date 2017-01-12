@@ -18,7 +18,7 @@ module DRG
       def remove_version
         swap_version('')
       end
-
+      require 'byebug'
       # @description Replaces the gem version with the given one
       # @example
       #
@@ -32,6 +32,7 @@ module DRG
       def swap_version(full_version)
         code, *comments = line.split(/#/)
         parts = code.split(',')
+        end_of_line = code.rstrip.end_with?(',') ? ",#{parts.last}" : ''
         if parts.size == 1
           parts[0].chomp!
           parts << " #{full_version}" unless full_version.empty?
@@ -46,15 +47,17 @@ module DRG
           if index = parts.index(version_parts.first)
             # replace the current gem version (inside quotes)
             parts[index].sub! /['"].+['"]/, full_version
-            # remove white spaces from this item if we're removing the version
-            parts[index].strip! if full_version.empty?
           else
             parts.insert 1, " #{full_version}"
           end
-          parts.reject!(&:empty?)
+          parts.reject! { |x| x.strip.empty? }
         end
+        space_after_gem = parts.first[/\s+$/].to_s
+        space_after_gem = space_after_gem[0, (space_after_gem.size - full_version.size) - 2] if space_after_gem.size > full_version.size
+        parts.first.rstrip!
         line.replace parts.join(',')
-        line << "#" << comments.join if comments.any?
+        line << end_of_line
+        line << space_after_gem << "#" << comments.join if comments.any?
         line << "\n" unless line.end_with?("\n")
         line
       end

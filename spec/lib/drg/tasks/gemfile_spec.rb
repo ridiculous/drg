@@ -99,7 +99,14 @@ describe DRG::Tasks::Gemfile do
       gem = subject.find_by_name('git')
       expect {
         subject.update(gem, '~> 1.3')
-      }.to change(gem, :to_s).to(%Q(gem 'git',          '~> 1.3'   # Git that repo\n))
+      }.to change(gem, :to_s).to(%Q(gem 'git',          '~> 1.3',   # Git that repo\n))
+    end
+
+    it 'updates the "duck_puncher" gem with the given -version-' do
+      gem = subject.find_by_name('duck_puncher')
+      expect {
+        subject.update(gem, '~> 4.4')
+      }.to change(gem, :to_s).to(%Q(gem 'duck_puncher', '~> 4.4'        # Precision monkey patches\n))
     end
   end
 
