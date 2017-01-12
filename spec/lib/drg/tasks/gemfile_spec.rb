@@ -78,7 +78,7 @@ describe DRG::Tasks::Gemfile do
       gem = subject.find_by_name('slop')
       expect {
         subject.update(gem, '3.6.0')
-      }.to change(gem, :to_s).from(%Q(gem 'slop')).to(%Q(gem 'slop', '3.6.0'\n))
+      }.to change(gem, :to_s).from(%Q(gem 'slop'\n)).to(%Q(gem 'slop', '3.6.0'\n))
     end
 
     it 'updates the "aws-sdk" gem to the given -version- and preserves spacing' do
@@ -93,6 +93,13 @@ describe DRG::Tasks::Gemfile do
       expect {
         subject.update(gem, '~> 2.6')
       }.to change(gem, :to_s).to(%Q(gem "whenever", '~> 2.6',                 require: false\n))
+    end
+
+    it 'updates the "git" gem with the given -version-' do
+      gem = subject.find_by_name('git')
+      expect {
+        subject.update(gem, '~> 1.3')
+      }.to change(gem, :to_s).to(%Q(gem 'git',          '~> 1.3'   # Git that repo\n))
     end
   end
 

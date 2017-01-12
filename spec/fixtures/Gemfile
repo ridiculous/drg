@@ -14,3 +14,5 @@ gem 'ruby_parser', '3.7.1'
 gem 'aws-sdk',                  '>= 1.56.0'   # Amazon Web Services
 gem "whenever",                 require: false
 gem 'slop'
+
+gem 'git',          '1.0.0.rc14'   # Git that repo
