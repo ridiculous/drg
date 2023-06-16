@@ -18,7 +18,7 @@ module DRG
       def remove_version
         swap_version('')
       end
-      require 'byebug'
+
       # @description Replaces the gem version with the given one
       # @example
       #
